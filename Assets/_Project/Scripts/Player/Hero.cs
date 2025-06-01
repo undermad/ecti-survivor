@@ -20,7 +20,6 @@ namespace _Project.Scripts.Player
         }
         void HandleTestEvent(TestEvent @event)
         {
-            Debug.Log(@event.Message);
         }
     }
 }

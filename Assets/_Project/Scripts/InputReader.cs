@@ -6,12 +6,13 @@ using UnityEngine.InputSystem;
 [CreateAssetMenu(fileName = "InputReader", menuName = "The-project/Input/InputReader")]
 public class InputReader : ScriptableObject, InputActions.IPlayerActions
 {
-    
     public event UnityAction<Vector2> Move = delegate { };
     public event UnityAction<Vector2, bool> Look = delegate { };
-    public event UnityAction<InputActionPhase> Fire = delegate { }; 
+    public event UnityAction<InputActionPhase> Fire = delegate { };
+    public event UnityAction Dash = delegate { };
 
     private InputActions _inputActions;
+
     private void OnEnable()
     {
         if (_inputActions == null)
@@ -19,7 +20,13 @@ public class InputReader : ScriptableObject, InputActions.IPlayerActions
             _inputActions = new InputActions();
             _inputActions.Player.SetCallbacks(this);
         }
+
         _inputActions.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _inputActions.Disable();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -36,9 +43,12 @@ public class InputReader : ScriptableObject, InputActions.IPlayerActions
     {
         Fire.Invoke(context.phase);
     }
-    private void OnDisable()
-    {
-        _inputActions.Disable();
-    }
 
+    public void OnDash(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            Dash.Invoke();
+        }
+    }
 }
