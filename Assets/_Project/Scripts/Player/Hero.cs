@@ -2,7 +2,7 @@
 using _Project.Scripts.EventBus.Events;
 using UnityEngine;
 
-namespace _Project.Scripts.Player
+namespace Explorer._Project.Scripts.Player
 {
     public class Hero : MonoBehaviour
     {

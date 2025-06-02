@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 
-namespace _Project.Scripts.Utils
+namespace Explorer._Project.Scripts.Utils.Assembly
 {
     public class PredefinedAssemblyUtil
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _Project.Scripts.StateMachine
+namespace Explorer._Project.Scripts.FiniteStateMachine
 {
     public class FuncPredicate : IPredicate
     {

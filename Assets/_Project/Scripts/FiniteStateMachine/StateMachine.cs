@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine.XR;
 
-namespace _Project.Scripts.StateMachine
+namespace Explorer._Project.Scripts.FiniteStateMachine
 {
     public class StateMachine
     {
         private StateNode current;
         private Dictionary<Type, StateNode> nodes = new();
         private HashSet<Transition> allTransitions = new();
-
-
 
         public void Update()
         {

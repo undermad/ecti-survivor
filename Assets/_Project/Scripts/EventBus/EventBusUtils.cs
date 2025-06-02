@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using _Project.Scripts.Utils;
+using Explorer._Project.Scripts.Utils;
+using Explorer._Project.Scripts.Utils.Assembly;
 using UnityEditor;
 using UnityEngine;
 

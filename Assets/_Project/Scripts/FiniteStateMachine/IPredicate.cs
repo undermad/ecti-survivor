@@ -1,4 +1,4 @@
-﻿namespace _Project.Scripts.StateMachine
+﻿namespace Explorer._Project.Scripts.FiniteStateMachine
 {
     public interface IPredicate
     {

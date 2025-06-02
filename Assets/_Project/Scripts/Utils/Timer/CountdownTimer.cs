@@ -1,4 +1,4 @@
-﻿namespace _Project.Scripts.Utils.Timer
+﻿namespace Explorer._Project.Scripts.Utils.Timer
 {
     public class CountdownTimer : Timer {
         public CountdownTimer(float value) : base(value) { }

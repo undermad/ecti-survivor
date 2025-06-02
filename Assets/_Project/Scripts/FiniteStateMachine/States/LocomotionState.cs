@@ -1,11 +1,16 @@
-﻿using UnityEngine;
+﻿using Explorer._Project.Scripts.Player;
+using UnityEngine;
 
-namespace _Project.Scripts.StateMachine.States
+namespace Explorer._Project.Scripts.FiniteStateMachine.States
 {
     public class LocomotionState : BaseState
     {
-        public LocomotionState(PlayerController playerController, Animator animator) : base(playerController, animator)
+        
+        private MovementController _movementController;
+        
+        public LocomotionState(MovementController movementController, Animator animator) : base(animator)
         {
+            _movementController = movementController;
         }
 
         public override void OnEnter()
@@ -20,7 +25,7 @@ namespace _Project.Scripts.StateMachine.States
 
         public override void FixedUpdate()
         {
-            _playerController.HandleMovement();
+            _movementController.FixedTick();
         }
 
         public override void OnExit()

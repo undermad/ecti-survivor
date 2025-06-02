@@ -1,4 +1,4 @@
-﻿namespace _Project.Scripts.Utils.Timer
+﻿namespace Explorer._Project.Scripts.Utils.Timer
 {
     public class StopwatchTimer : Timer {
         public StopwatchTimer() : base(0) { }

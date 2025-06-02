@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _Project.Scripts.Utils.Timer
+namespace Explorer._Project.Scripts.Utils.Timer
 {
     public abstract class Timer {
         protected float InitialTime;
