@@ -34,11 +34,7 @@ public class PlayerController : ValidatedMonoBehaviour
 
     private void Update()
     {
-        // Add Cooldown manager - consider global Cooldowns that affects whole game world
-        dashAbility.TickTimers(Time.deltaTime);
-        
         stateMachineController.Tick();
-        animatorController.UpdateSpeed(movementController.GetCurrentSpeed());
     }
 
     private void FixedUpdate()

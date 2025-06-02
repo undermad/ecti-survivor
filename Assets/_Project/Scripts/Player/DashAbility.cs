@@ -1,6 +1,8 @@
-﻿using Explorer._Project.Scripts.EventBus;
+﻿using System;
+using Explorer._Project.Scripts.EventBus;
 using Explorer._Project.Scripts.Player.Events;
 using Explorer._Project.Scripts.Utils.Timer;
+using Explorer._Project.Scripts.World;
 using KBCore.Refs;
 using UnityEngine;
 
@@ -17,7 +19,6 @@ namespace Explorer._Project.Scripts.Player
 
         private bool CanDash { get; set; } = true;
 
-
         private CountdownTimer _cooldown;
         private CountdownTimer _duration;
 
@@ -25,6 +26,8 @@ namespace Explorer._Project.Scripts.Player
         {
             _cooldown = new CountdownTimer(dashCooldownDuration);
             _duration = new CountdownTimer(dashDuration);
+            
+            CooldownManager.AddTimers( _cooldown, _duration);
 
             _duration.OnTimerStart += () =>
             {
@@ -54,11 +57,9 @@ namespace Explorer._Project.Scripts.Player
             _duration.Start();
         }
 
-        public void TickTimers(float deltaTime)
+        private void OnDestroy()
         {
-            _cooldown.Tick(deltaTime);
-            _duration.Tick(deltaTime);
+            CooldownManager.RemoveTimer(_cooldown, _duration);
         }
-
     }
 }

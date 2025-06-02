@@ -38,6 +38,7 @@ namespace Explorer._Project.Scripts.Player
             EventBus<DashAbilityEndedEvent>.UnSubscribe(_dashAbilityEndedBinding);
         }
 
+
         public void FixedTick()
         {
             if (_inputVector != Vector2.zero)
