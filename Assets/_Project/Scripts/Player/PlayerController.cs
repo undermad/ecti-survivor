@@ -1,6 +1,5 @@
-using _Project.Scripts.EventBus;
-using _Project.Scripts.EventBus.Events;
-using Explorer._Project.Scripts;
+using Explorer._Project.Scripts.EventBus;
+using Explorer._Project.Scripts.EventBus.Events;
 using Explorer._Project.Scripts.Player;
 using KBCore.Refs;
 using UnityEngine;
@@ -10,7 +9,7 @@ public class PlayerController : ValidatedMonoBehaviour
 {
     [SerializeField, Anywhere] private InputReader inputReader;
     [SerializeField, Self] public MovementController movementController;
-    [SerializeField, Self] private DashAbility dashAbility;
+    [SerializeField, Self] public DashAbility dashAbility;
     [SerializeField, Self] private AnimatorController animatorController;
     [SerializeField, Self] private PlayerStateMachineController stateMachineController;
 
@@ -35,16 +34,16 @@ public class PlayerController : ValidatedMonoBehaviour
 
     private void Update()
     {
+        // Add Cooldown manager - consider global Cooldowns that affects whole game world
         dashAbility.TickTimers(Time.deltaTime);
+        
         stateMachineController.Tick();
         animatorController.UpdateSpeed(movementController.GetCurrentSpeed());
     }
 
     private void FixedUpdate()
     {
-        movementController.SetVelocityMultiplier(dashAbility.CurrentMultiplier);
         stateMachineController.FixedTick();
-        movementController.FixedTick();
     }
 
     private void HandleFire(InputActionPhase phase)

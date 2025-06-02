@@ -1,30 +1,33 @@
 ﻿using System;
-using _Project.Scripts.EventBus;
+using Explorer._Project.Scripts.EventBus.Events;
 
-public class EventBinding<T> : IEventBinding<T> where T : IEvent
+namespace Explorer._Project.Scripts.EventBus
 {
-    Action<T> onEvent = _ => { };
-    private Action onEventNoArgs = () => { };
-
-
-    Action<T> IEventBinding<T>.OnEvent
+    public class EventBinding<T> : IEventBinding<T> where T : IEvent
     {
-        get => onEvent;
-        set => onEvent = value;
-    }
+        Action<T> onEvent = _ => { };
+        private Action onEventNoArgs = () => { };
 
-    Action IEventBinding<T>.OnEventNoArgs
-    {
-        get => onEventNoArgs;
-        set => onEventNoArgs = value;
+
+        Action<T> IEventBinding<T>.OnEvent
+        {
+            get => onEvent;
+            set => onEvent = value;
+        }
+
+        Action IEventBinding<T>.OnEventNoArgs
+        {
+            get => onEventNoArgs;
+            set => onEventNoArgs = value;
+        }
+    
+        public EventBinding(Action<T> onEvent) => this.onEvent = onEvent;
+        public EventBinding(Action onEventNoArgs) => this.onEventNoArgs = onEventNoArgs;
+    
+        public void Add(Action<T> onEvent) => this.onEvent += onEvent;
+        public void Remove(Action<T> onEvent) => this.onEvent -= onEvent;
+    
+        public void Add(Action onEventNoArgs) => this.onEventNoArgs += onEventNoArgs;
+        public void Remove(Action onEventNoArgs) => this.onEventNoArgs -= onEventNoArgs;
     }
-    
-    public EventBinding(Action<T> onEvent) => this.onEvent = onEvent;
-    public EventBinding(Action onEventNoArgs) => this.onEventNoArgs = onEventNoArgs;
-    
-    public void Add(Action<T> onEvent) => this.onEvent += onEvent;
-    public void Remove(Action<T> onEvent) => this.onEvent -= onEvent;
-    
-    public void Add(Action onEventNoArgs) => this.onEventNoArgs += onEventNoArgs;
-    public void Remove(Action onEventNoArgs) => this.onEventNoArgs -= onEventNoArgs;
 }

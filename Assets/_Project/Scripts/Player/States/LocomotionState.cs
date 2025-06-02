@@ -1,12 +1,13 @@
-﻿using Explorer._Project.Scripts.Player;
+﻿using Explorer._Project.Scripts.FiniteStateMachine;
 using UnityEngine;
 
-namespace Explorer._Project.Scripts.FiniteStateMachine.States
+namespace Explorer._Project.Scripts.Player.States
 {
     public class LocomotionState : BaseState
     {
         
-        private MovementController _movementController;
+        private readonly MovementController _movementController;
+        private static readonly int LocomotionHash = Animator.StringToHash("Locomotion");
         
         public LocomotionState(MovementController movementController, Animator animator) : base(animator)
         {
@@ -16,7 +17,7 @@ namespace Explorer._Project.Scripts.FiniteStateMachine.States
         public override void OnEnter()
         {
             Debug.Log("Locomotion On Enter");
-            _animator.CrossFade(LocomotionHash, CrossFadeDuration);
+            Animator.CrossFade(LocomotionHash, CrossFadeDuration);
         }
 
         public override void Update()

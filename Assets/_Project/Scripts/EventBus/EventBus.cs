@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Explorer._Project.Scripts.EventBus.Events;
 using UnityEngine;
 
-namespace _Project.Scripts.EventBus
+namespace Explorer._Project.Scripts.EventBus
 {
     public static class EventBus<T> where T : IEvent 
     {

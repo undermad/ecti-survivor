@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Explorer._Project.Scripts.Utils;
+using Explorer._Project.Scripts.EventBus.Events;
 using Explorer._Project.Scripts.Utils.Assembly;
 using UnityEditor;
 using UnityEngine;
 
-namespace _Project.Scripts.EventBus
+namespace Explorer._Project.Scripts.EventBus
 {
     public static class EventBusUtils
     {

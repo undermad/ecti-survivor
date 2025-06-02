@@ -1,25 +1,22 @@
-﻿using Explorer._Project.Scripts.Player;
+﻿using Explorer._Project.Scripts.FiniteStateMachine;
 using UnityEngine;
 
-namespace Explorer._Project.Scripts.FiniteStateMachine.States
+namespace Explorer._Project.Scripts.Player.States
 {
     public class DashState : BaseState
     {
-        private MovementController _movementController;
-        private bool _isDashing;
-        
+        private readonly MovementController _movementController;
+        private static readonly int DashHash = Animator.StringToHash("Dash");
+
         public DashState(MovementController movementController, Animator animator) : base(animator)
         {
             _movementController = movementController;
         }
-
-        public bool IsDashing => _isDashing;
-
+        
         public override void OnEnter()
         {
             Debug.Log("Dash On Enter");
-            _isDashing = true;
-            _animator.CrossFade(DashHash, CrossFadeDuration);
+            Animator.CrossFade(DashHash, CrossFadeDuration);
         }
 
         public override void Update()
@@ -34,7 +31,6 @@ namespace Explorer._Project.Scripts.FiniteStateMachine.States
         public override void OnExit()
         {
             Debug.Log("Dash On Exit");
-            _isDashing = false;
         }
     }
 }

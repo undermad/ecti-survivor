@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Explorer._Project.Scripts.EventBus;
+using Explorer._Project.Scripts.Player.Events;
 using Explorer._Project.Scripts.Utils.Timer;
 using KBCore.Refs;
 using UnityEngine;
@@ -12,16 +13,13 @@ namespace Explorer._Project.Scripts.Player
         [SerializeField] private float dashForce = 100f;
         [SerializeField] private float dashDuration = 0.3f;
         
-        public float CurrentMultiplier => _isDashing ? dashForce : 1f;
+        public bool IsDashing { get; private set; }
 
-        public bool CanDash => !_cooldown.IsRunning;
+        private bool CanDash { get; set; } = true;
 
-        public event Action OnDashStart;
-        public event Action OnDashEnd;
 
         private CountdownTimer _cooldown;
         private CountdownTimer _duration;
-        private bool _isDashing;
 
         private void Awake()
         {
@@ -30,15 +28,23 @@ namespace Explorer._Project.Scripts.Player
 
             _duration.OnTimerStart += () =>
             {
-                _isDashing = true;
-                OnDashStart?.Invoke();
+                IsDashing = true;
+                CanDash = false;
+                EventBus<DashAbilityStartedEvent>.Publish(new DashAbilityStartedEvent{ DashForce = 100f });
             };
 
             _duration.OnTimerStop += () =>
             {
-                _isDashing = false;
+                IsDashing = false;
                 _cooldown.Start();
-                OnDashEnd?.Invoke();
+                _duration.Reset();
+                EventBus<DashAbilityEndedEvent>.Publish(new DashAbilityEndedEvent());
+            };
+
+            _cooldown.OnTimerStop += () =>
+            {
+                _cooldown.Reset();
+                CanDash = true;
             };
         }
 
@@ -54,7 +60,5 @@ namespace Explorer._Project.Scripts.Player
             _duration.Tick(deltaTime);
         }
 
-        public bool IsDashing => _isDashing;
-        
     }
 }

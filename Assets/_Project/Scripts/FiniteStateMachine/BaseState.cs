@@ -4,32 +4,20 @@ namespace Explorer._Project.Scripts.FiniteStateMachine
 {
     public abstract class BaseState : IState
     {
-        protected readonly Animator _animator;
-        
-        protected static readonly int LocomotionHash = Animator.StringToHash("Locomotion");
-        protected static readonly int DashHash = Animator.StringToHash("Dash");
-
+        protected readonly Animator Animator;
         protected const float CrossFadeDuration = 0.1f;
 
         protected BaseState(Animator animator)
         {
-            _animator = animator;
+            Animator = animator;
         }
 
-        public virtual void OnEnter()
-        {
-        }
+        public abstract void OnEnter();
 
-        public virtual void Update()
-        {
-        }
+        public abstract void Update();
 
-        public virtual void FixedUpdate()
-        {
-        }
+        public abstract void FixedUpdate();
 
-        public virtual void OnExit()
-        {
-        }
+        public abstract void OnExit();
     }
 }

@@ -1,4 +1,6 @@
-﻿using KBCore.Refs;
+﻿using Explorer._Project.Scripts.EventBus;
+using Explorer._Project.Scripts.Player.Events;
+using KBCore.Refs;
 using UnityEngine;
 
 namespace Explorer._Project.Scripts.Player
@@ -15,10 +17,27 @@ namespace Explorer._Project.Scripts.Player
         private Vector2 _currentVelocity;
         private float _velocityMultiplier = 1f;
         
+        private EventBinding<DashAbilityStartedEvent> _dashAbilityUsedBinding;
+        private EventBinding<DashAbilityEndedEvent> _dashAbilityEndedBinding;
+        
         public void SetInput(Vector2 input) => _inputVector = input;
 
-        public void SetVelocityMultiplier(float multiplier) => _velocityMultiplier = multiplier;
-        
+
+        private void Awake()
+        {
+            _dashAbilityUsedBinding = new EventBinding<DashAbilityStartedEvent>(HandleOnDashAbilityStarted);
+            EventBus<DashAbilityStartedEvent>.Subscribe(_dashAbilityUsedBinding);
+
+            _dashAbilityEndedBinding = new EventBinding<DashAbilityEndedEvent>(HandleOnDashAbilityEnded);
+            EventBus<DashAbilityEndedEvent>.Subscribe(_dashAbilityEndedBinding);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<DashAbilityStartedEvent>.UnSubscribe(_dashAbilityUsedBinding);
+            EventBus<DashAbilityEndedEvent>.UnSubscribe(_dashAbilityEndedBinding);
+        }
+
         public void FixedTick()
         {
             if (_inputVector != Vector2.zero)
@@ -42,6 +61,16 @@ namespace Explorer._Project.Scripts.Player
         }
 
         public float GetCurrentSpeed() => _currentVelocity.magnitude;
+
+        private void HandleOnDashAbilityStarted(DashAbilityStartedEvent e)
+        {
+            _velocityMultiplier = e.DashForce;
+        }
+
+        private void HandleOnDashAbilityEnded()
+        {
+            _velocityMultiplier = 1f;
+        }
         
     }
 }

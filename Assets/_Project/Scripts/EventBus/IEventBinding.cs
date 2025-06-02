@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _Project.Scripts.EventBus
+namespace Explorer._Project.Scripts.EventBus
 {
     public interface IEventBinding<T>
     {

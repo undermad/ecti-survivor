@@ -1,5 +1,5 @@
-﻿using _Project.Scripts.EventBus;
-using _Project.Scripts.EventBus.Events;
+﻿using Explorer._Project.Scripts.EventBus;
+using Explorer._Project.Scripts.EventBus.Events;
 using UnityEngine;
 
 namespace Explorer._Project.Scripts.Player

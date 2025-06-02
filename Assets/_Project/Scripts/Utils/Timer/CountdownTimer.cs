@@ -1,4 +1,6 @@
-﻿namespace Explorer._Project.Scripts.Utils.Timer
+﻿using UnityEngine;
+
+namespace Explorer._Project.Scripts.Utils.Timer
 {
     public class CountdownTimer : Timer {
         public CountdownTimer(float value) : base(value) { }
@@ -18,6 +20,7 @@
         public void Reset() => Time = InitialTime;
         
         public void Reset(float newTime) {
+            Debug.Log($"Resetting timer to.");
             InitialTime = newTime;
             Reset();
         }
