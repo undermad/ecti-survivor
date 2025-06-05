@@ -8,9 +8,9 @@ namespace Explorer._Project.Scripts.Player.Hand
     {
         [SerializeField] public float radius = 1f;
 
-        private Vector2 _mouseScreenPosition;
+        // private Vector2 _mouseScreenPosition;
 
-        void LateUpdate()
+        void FixedUpdate()
         {
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             Vector2 direction = (mousePosition - (Vector2)transform.parent.position).normalized;
@@ -28,9 +28,9 @@ namespace Explorer._Project.Scripts.Player.Hand
         }
 
         // fix new input system to support pads
-        public void OnLook(InputAction.CallbackContext context)
-        {
-            _mouseScreenPosition = context.ReadValue<Vector2>();
-        }
+        // public void OnLook(InputAction.CallbackContext context)
+        // {
+        //     _mouseScreenPosition = context.ReadValue<Vector2>();
+        // }
     }
 }
