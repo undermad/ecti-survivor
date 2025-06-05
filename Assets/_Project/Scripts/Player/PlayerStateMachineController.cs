@@ -1,16 +1,15 @@
 ﻿using Explorer._Project.Scripts.FiniteStateMachine;
 using Explorer._Project.Scripts.Player.States;
-using KBCore.Refs;
+using UnityEngine;
 
 namespace Explorer._Project.Scripts.Player
 {
-    public class PlayerStateMachineController : ValidatedMonoBehaviour
+    public class PlayerStateMachineController : MonoBehaviour
     {
         private StateMachine _stateMachine;
 
-        public void Initialize(PlayerController playerController, AnimatorController animatorController)
+        public void Initialize(PlayerController playerController, Animator animator)
         {
-            var animator = animatorController.animator;
             var movementController = playerController.movementController;
             var dashAbility = playerController.dashAbility;
             

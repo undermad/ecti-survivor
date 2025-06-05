@@ -1,5 +1,4 @@
-﻿using System;
-using Explorer._Project.Scripts.EventBus;
+﻿using Explorer._Project.Scripts.EventBus;
 using Explorer._Project.Scripts.Player.Events;
 using Explorer._Project.Scripts.Utils.Timer;
 using Explorer._Project.Scripts.World;
@@ -8,7 +7,7 @@ using UnityEngine;
 
 namespace Explorer._Project.Scripts.Player
 {
-    public class DashAbility : ValidatedMonoBehaviour
+    public class DashAbility : MonoBehaviour
     {
         [Header("Dash Settings")]
         [SerializeField] private float dashCooldownDuration = 2f;

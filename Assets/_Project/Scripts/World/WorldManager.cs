@@ -1,9 +1,8 @@
-﻿using System;
-using KBCore.Refs;
+﻿using UnityEngine;
 
 namespace Explorer._Project.Scripts.World
 {
-    public class WorldManager : ValidatedMonoBehaviour
+    public class WorldManager : MonoBehaviour
     {
         private void Update()
         {

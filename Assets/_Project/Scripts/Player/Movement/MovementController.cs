@@ -9,6 +9,7 @@ namespace Explorer._Project.Scripts.Player
     {
         [Header("Settings")] 
         [SerializeField, Self] private Rigidbody2D rigidbody;
+        [SerializeField, Self] private Transform transform;
         [SerializeField] private float moveSpeed = 10f;
         [SerializeField] private float acceleration = 100f;
         [SerializeField] private float deceleration = 100f;
@@ -20,22 +21,26 @@ namespace Explorer._Project.Scripts.Player
         private EventBinding<DashAbilityStartedEvent> _dashAbilityUsedBinding;
         private EventBinding<DashAbilityEndedEvent> _dashAbilityEndedBinding;
         
-        public void SetInput(Vector2 input) => _inputVector = input;
+        private EventBinding<MoveEvent> _moveBinding;
+        
+        public void SetInput(MoveEvent e) => _inputVector = e.Direction;
 
 
         private void Awake()
         {
             _dashAbilityUsedBinding = new EventBinding<DashAbilityStartedEvent>(HandleOnDashAbilityStarted);
             EventBus<DashAbilityStartedEvent>.Subscribe(_dashAbilityUsedBinding);
-
             _dashAbilityEndedBinding = new EventBinding<DashAbilityEndedEvent>(HandleOnDashAbilityEnded);
             EventBus<DashAbilityEndedEvent>.Subscribe(_dashAbilityEndedBinding);
+            _moveBinding = new EventBinding<MoveEvent>(SetInput);
+            EventBus<MoveEvent>.Subscribe(_moveBinding);
         }
 
         private void OnDisable()
         {
             EventBus<DashAbilityStartedEvent>.UnSubscribe(_dashAbilityUsedBinding);
             EventBus<DashAbilityEndedEvent>.UnSubscribe(_dashAbilityEndedBinding);
+            EventBus<MoveEvent>.UnSubscribe(_moveBinding);
         }
 
 
@@ -48,6 +53,13 @@ namespace Explorer._Project.Scripts.Player
                     _inputVector * (moveSpeed * _velocityMultiplier),
                     acceleration * Time.fixedDeltaTime
                 );
+                
+                if (_inputVector.x != 0)
+                {
+                    Vector3 scale = transform.localScale;
+                    scale.x = _inputVector.x > 0 ? -Mathf.Abs(scale.x) : Mathf.Abs(scale.x);
+                    transform.localScale = scale;
+                }
             }
             else
             {

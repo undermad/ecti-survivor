@@ -8,6 +8,8 @@ namespace Explorer._Project.Scripts.Player.States
         
         private readonly MovementController _movementController;
         private static readonly int LocomotionHash = Animator.StringToHash("Locomotion");
+        private static readonly int SpeedHash = Animator.StringToHash("Speed");
+
         
         public LocomotionState(MovementController movementController, Animator animator) : base(animator)
         {
@@ -22,6 +24,8 @@ namespace Explorer._Project.Scripts.Player.States
 
         public override void Update()
         {
+            Animator.SetFloat(SpeedHash, _movementController.GetCurrentSpeed());
+
         }
 
         public override void FixedUpdate()
