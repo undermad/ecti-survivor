@@ -1,4 +1,5 @@
 ﻿using Explorer._Project.Scripts.FiniteStateMachine;
+using Explorer._Project.Scripts.Player.Movement;
 using UnityEngine;
 
 namespace Explorer._Project.Scripts.Player.States
@@ -8,14 +9,13 @@ namespace Explorer._Project.Scripts.Player.States
         private readonly MovementController _movementController;
         private static readonly int DashHash = Animator.StringToHash("Dash");
 
-        public DashState(MovementController movementController, Animator animator) : base(animator)
+        public DashState(MovementController movementController, Animator animator, bool canStopAnimation) : base(animator, canStopAnimation)
         {
             _movementController = movementController;
         }
         
         public override void OnEnter()
         {
-            Debug.Log("Dash On Enter");
             Animator.CrossFade(DashHash, CrossFadeDuration);
         }
 
@@ -30,7 +30,6 @@ namespace Explorer._Project.Scripts.Player.States
 
         public override void OnExit()
         {
-            Debug.Log("Dash On Exit");
         }
     }
 }

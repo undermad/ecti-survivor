@@ -14,8 +14,8 @@ namespace Explorer._Project.Scripts.Player
             var dashAbility = playerController.dashAbility;
             
             
-            var locomotion = new LocomotionState(movementController, animator);
-            var dash = new DashState(movementController, animator);
+            var locomotion = new LocomotionState(movementController, animator, true);
+            var dash = new DashState(movementController, animator, true);
             
             _stateMachine = new StateMachine();
             _stateMachine.AddTransition(locomotion, dash, new FuncPredicate(() => dashAbility.IsDashing));

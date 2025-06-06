@@ -5,21 +5,22 @@ using Explorer._Project.Scripts.Player.Hand.States;
 using Explorer._Project.Scripts.Player.Weapon.States;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using StateMachine = Explorer._Project.Scripts.FiniteStateMachine.StateMachine;
 
 namespace Explorer._Project.Scripts.Player.Hand
 {
-    public class HandStateMachineController : MonoBehaviour
+    public class HandStateMachine : MonoBehaviour
     {
         private EventBinding<FireButtonEvent> _fireButtonEventBinding;
-        
+
         private StateMachine _stateMachine;
         private bool _isAttacking;
 
         public void Initialize(Animator animator)
         {
-            var idleState = new WeaponIdleState(animator);
-            var attackState = new WeaponAttackState(animator);
-            
+            var idleState = new WeaponIdleState(animator, true);
+            var attackState = new WeaponAttackState(animator, false);
+
             _stateMachine = new StateMachine();
             _stateMachine.AddTransition(idleState, attackState, new FuncPredicate(() => _isAttacking));
             _stateMachine.AddTransition(attackState, idleState, new FuncPredicate(() => !_isAttacking));
@@ -36,19 +37,25 @@ namespace Explorer._Project.Scripts.Player.Hand
         {
             EventBus<FireButtonEvent>.UnSubscribe(_fireButtonEventBinding);
         }
-        
-        void HandleFireButtonEvent(FireButtonEvent e)
+
+        private void HandleFireButtonEvent(FireButtonEvent e)
         {
-            _isAttacking = e.Phase switch
+            switch (e.Phase)
             {
-                InputActionPhase.Started => true,
-                InputActionPhase.Canceled => false,
-                _ => _isAttacking
-            };
+                case InputActionPhase.Started:
+                    _isAttacking = true;
+                    break;
+                case InputActionPhase.Canceled:
+                    _isAttacking = false;
+                    break;
+            }
         }
 
+        public void Tick()
+        {
+            _stateMachine.Update();
+        }
 
-        public void Tick() => _stateMachine.Update();
         public void FixedTick() => _stateMachine.FixedUpdate();
     }
 }

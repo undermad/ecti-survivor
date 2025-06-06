@@ -8,21 +8,22 @@ namespace Explorer._Project.Scripts.Player.Hand
 {
     public class HandController : ValidatedMonoBehaviour
     {
-        [SerializeField, Self] private HandStateMachineController handStateMachineController;
+        [FormerlySerializedAs("handStateMachineController")] [SerializeField, Self] private HandStateMachine handStateMachine;
         [SerializeField, Self] private Animator animator;
+
         private void Awake()
         {
-            handStateMachineController.Initialize(animator);
+            handStateMachine.Initialize(animator);
         }
 
         private void Update()
         {
-            handStateMachineController.Tick();
+            handStateMachine.Tick();
         }
         
         private void FixedUpdate()
         {
-            handStateMachineController.FixedTick();
+            handStateMachine.FixedTick();
         }
     }
 }

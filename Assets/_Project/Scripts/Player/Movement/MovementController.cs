@@ -3,7 +3,7 @@ using Explorer._Project.Scripts.Player.Events;
 using KBCore.Refs;
 using UnityEngine;
 
-namespace Explorer._Project.Scripts.Player
+namespace Explorer._Project.Scripts.Player.Movement
 {
     public class MovementController : ValidatedMonoBehaviour
     {
@@ -22,8 +22,8 @@ namespace Explorer._Project.Scripts.Player
         private EventBinding<DashAbilityEndedEvent> _dashAbilityEndedBinding;
         
         private EventBinding<MoveEvent> _moveBinding;
-        
-        public void SetInput(MoveEvent e) => _inputVector = e.Direction;
+
+        private void SetInput(MoveEvent e) => _inputVector = e.Direction;
 
 
         private void Awake()

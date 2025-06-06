@@ -12,6 +12,12 @@ namespace Explorer._Project.Scripts.FiniteStateMachine
 
         public void Update()
         {
+            if (!current.State.CanStopAnimation())
+            {
+                current.State?.Update();
+                return;
+            }
+            
             var transition = GetTransition();
             if (transition != null)
             {

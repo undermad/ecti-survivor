@@ -8,13 +8,12 @@ namespace Explorer._Project.Scripts.Player.Weapon.States
         
         private readonly int WeaponIdleHash = Animator.StringToHash("WeaponIdle"); 
         
-        public WeaponIdleState(Animator animator) : base(animator)
+        public WeaponIdleState(Animator animator, bool canStopAnimation) : base(animator, canStopAnimation)
         {
         }
 
         public override void OnEnter()
         {
-            Debug.Log("Weapon - Idle state enter");
             Animator.CrossFade(WeaponIdleHash, CrossFadeDuration);
         }
 
@@ -28,8 +27,6 @@ namespace Explorer._Project.Scripts.Player.Weapon.States
 
         public override void OnExit()
         {
-            Debug.Log("Weapon - Idle state exit");
-
         }
     }
 }

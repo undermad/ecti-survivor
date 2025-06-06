@@ -2,6 +2,7 @@
 {
     public interface IState
     {
+        bool CanStopAnimation();
         void OnEnter();
         void Update();
         void FixedUpdate();

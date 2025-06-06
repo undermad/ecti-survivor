@@ -1,7 +1,7 @@
 using KBCore.Refs;
 using UnityEngine;
 
-namespace Explorer._Project.Scripts.Player
+namespace Explorer._Project.Scripts.World
 {
     public class CameraController : MonoBehaviour
     {
@@ -9,7 +9,7 @@ namespace Explorer._Project.Scripts.Player
         [SerializeField, Anywhere] private Transform target;
     
         [Header("Settings")]
-        [SerializeField] private Vector3 offset = new Vector3(0, 0, -10);
+        [SerializeField] private Vector3 offset = new(0, 0, -10);
         [SerializeField] private float smoothSpeed = 0.125f;
 
 
