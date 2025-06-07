@@ -1,5 +1,6 @@
 ﻿using Explorer._Project.Scripts.FiniteStateMachine;
 using Explorer._Project.Scripts.Player.Movement;
+using Explorer._Project.Scripts.Utils;
 using UnityEngine;
 
 namespace Explorer._Project.Scripts.Player.States
@@ -7,7 +8,7 @@ namespace Explorer._Project.Scripts.Player.States
     public class LocomotionState : BaseState
     {
         private readonly MovementController _movementController;
-        private static readonly int LocomotionHash = Animator.StringToHash("Locomotion");
+        private static readonly int LocomotionHash = Animator.StringToHash(AnimationsStatesRegistry.Locomotion);
         private static readonly int SpeedHash = Animator.StringToHash("Speed");
 
 

@@ -3,12 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Other/Test
+  - Enemy/Enemy
+  - Player/Player
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy
   - Water
   - UI
   - 
@@ -49,6 +52,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 464372403
+    locked: 0
+  - name: UI
+    uniqueID: 452523557
     locked: 0
   m_RenderingLayers:
   - Default
