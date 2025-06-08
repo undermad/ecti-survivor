@@ -2,7 +2,6 @@
 using Explorer._Project.Scripts.FiniteStateMachine;
 using Explorer._Project.Scripts.Player.Events;
 using Explorer._Project.Scripts.Player.Hand.States;
-using Explorer._Project.Scripts.Player.Weapon.States;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using StateMachine = Explorer._Project.Scripts.FiniteStateMachine.StateMachine;

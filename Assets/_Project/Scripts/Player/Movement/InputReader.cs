@@ -53,5 +53,13 @@ namespace Explorer._Project.Scripts.Player.Movement
                 Dash.Invoke();
             }
         }
+
+        public void OnSwapWeapon(InputAction.CallbackContext context)
+        {
+            if (context.phase == InputActionPhase.Started)
+            {
+                EventBus<ChangeWeaponEvent>.Publish(new ChangeWeaponEvent());
+            }
+        }
     }
 }

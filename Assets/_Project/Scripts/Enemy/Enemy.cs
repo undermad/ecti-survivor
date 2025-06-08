@@ -22,7 +22,6 @@ namespace Explorer._Project.Scripts.Enemy
         
         private void Update()
         {
-            Debug.Log(navMeshAgent.isOnNavMesh);
             if (navMeshAgent.isOnNavMesh)
             {
                 navMeshAgent.SetDestination(target.position);

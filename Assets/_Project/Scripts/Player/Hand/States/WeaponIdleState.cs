@@ -2,7 +2,7 @@
 using Explorer._Project.Scripts.Utils;
 using UnityEngine;
 
-namespace Explorer._Project.Scripts.Player.Weapon.States
+namespace Explorer._Project.Scripts.Player.Hand.States
 {
     public class WeaponIdleState : BaseState
     {

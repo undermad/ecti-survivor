@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Numerics;
 using Explorer._Project.Scripts.Enemy;
 using Explorer._Project.Scripts.EventBus;
 using Explorer._Project.Scripts.Player.Events;
@@ -7,23 +6,36 @@ using Explorer._Project.Scripts.Player.Hand.States;
 using Explorer._Project.Scripts.Utils;
 using KBCore.Refs;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
 namespace Explorer._Project.Scripts.Player.Hand
 {
-    public class Attack : MonoBehaviour
+    public class Attack : ValidatedMonoBehaviour
     {
         [SerializeField, Parent] private Animator animator;
+        [SerializeField, Anywhere] private WeaponAnimationDataSO weaponAnimationDataSo;
 
         private float _lastNormalizedTime;
         private EventBinding<StateEndEvent> _stateEndEventBinding;
 
-        private readonly HashSet<GameObject> _hittedEnemies = new HashSet<GameObject>();
+        private readonly HashSet<GameObject> _hittedEnemies = new();
 
         private void OnEnable()
         {
+            animator = GetComponentInParent<Animator>();
+            
+            var runtimeAnimatorController = animator.runtimeAnimatorController;
+            if (runtimeAnimatorController is AnimatorOverrideController existingOverride)
+            {
+                runtimeAnimatorController = existingOverride.runtimeAnimatorController;
+            }
+            
+            var overrideController = new AnimatorOverrideController(runtimeAnimatorController)
+            {
+                ["Attack1"] = weaponAnimationDataSo.AnimationClip
+            };
+            animator.runtimeAnimatorController = overrideController;
+            
+            
             _stateEndEventBinding = new EventBinding<StateEndEvent>(HandleStateEndEvent);
             EventBus<StateEndEvent>.Subscribe(_stateEndEventBinding);
         }
@@ -35,6 +47,7 @@ namespace Explorer._Project.Scripts.Player.Hand
 
         private void Update()
         {
+
             var animationState = animator.GetCurrentAnimatorStateInfo(0);
             var normalizedTime = animationState.normalizedTime;
             if (animationState.IsName(AnimationsStatesRegistry.WeaponAttack))
