@@ -6,7 +6,6 @@ namespace Explorer._Project.Scripts.World
 {
     public static class CooldownManager
     {
-        // need to use different structure to quickly add and remove
         private static readonly HashSet<Timer> timers = new();
 
         public static void AddTimers(params Timer[] newTimers)

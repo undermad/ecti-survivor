@@ -8,8 +8,8 @@ namespace Explorer._Project.Scripts.Player.Movement
     public class MovementController : ValidatedMonoBehaviour
     {
         [Header("Settings")] 
-        [SerializeField, Self] private Rigidbody2D rigidbody;
-        [SerializeField, Self] private Transform transform;
+        [SerializeField, Parent] private Rigidbody2D rigidbody;
+        [SerializeField, Parent] private Transform transform;
         [SerializeField] private float moveSpeed = 10f;
         [SerializeField] private float acceleration = 100f;
         [SerializeField] private float deceleration = 100f;

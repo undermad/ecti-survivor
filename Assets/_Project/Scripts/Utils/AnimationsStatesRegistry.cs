@@ -5,6 +5,7 @@
         // Hand
         public const string WeaponIdle = "WeaponIdle";
         public const string WeaponAttack = "WeaponAttack";
+        public const string ChangeWeapon = "ChangeWeapon"; 
         
         // Player
         public const string Locomotion = "Locomotion";

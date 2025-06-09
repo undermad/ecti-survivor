@@ -1,3 +1,4 @@
+using System;
 using KBCore.Refs;
 using UnityEngine;
 
@@ -13,6 +14,10 @@ namespace Explorer._Project.Scripts.World
         [SerializeField] private float smoothSpeed = 0.125f;
 
 
+        private void Start()
+        {
+            Screen.SetResolution(1920, 1080, true);
+        }
 
         private void LateUpdate()
         {

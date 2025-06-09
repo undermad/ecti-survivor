@@ -1,12 +1,14 @@
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Explorer._Project.Scripts.Player.Hand
 {
     public class HandRotator : ValidatedMonoBehaviour
     {
         [SerializeField] public float radius = 1f;
+        [SerializeField, Anywhere] private Transform attachedTo;
 
         private Vector2 _mousePosition;
         private Vector2 _direction;
@@ -14,8 +16,8 @@ namespace Explorer._Project.Scripts.Player.Hand
         void FixedUpdate()
         {
             _mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            _direction = (_mousePosition - (Vector2)transform.parent.position).normalized;
-            transform.position = (Vector2)transform.parent.position + _direction * radius;
+            _direction = (_mousePosition - (Vector2)attachedTo.position).normalized;
+            transform.position = (Vector2)attachedTo.position + _direction * radius;
 
             float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, angle);
@@ -31,4 +33,3 @@ namespace Explorer._Project.Scripts.Player.Hand
         }
     }
 }
-
