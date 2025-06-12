@@ -54,6 +54,9 @@ namespace Explorer._Project.Scripts.Player.Hand
                 case InputActionPhase.Started:
                     _isAttacking = true;
                     break;
+                case InputActionPhase.Canceled:
+                    _isAttacking = false;
+                    break;
             }
         }
 
@@ -69,11 +72,6 @@ namespace Explorer._Project.Scripts.Player.Hand
         }
 
         public void FixedTick() => _stateMachine.FixedUpdate();
-
-        public void HandleAttackAnimationEndEvent()
-        {
-            _isAttacking = false;
-        }
         
         // attached to animation in unity
         public void HandleChangeWeaponAnimationEvent()

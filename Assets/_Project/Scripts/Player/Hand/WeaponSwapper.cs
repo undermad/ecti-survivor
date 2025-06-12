@@ -30,7 +30,6 @@ namespace Explorer._Project.Scripts.Player.Hand
             EventBus<ChangeWeaponEvent>.UnSubscribe(_changeWeaponEventBinding);
         }
 
-
         private void Equip(GameObject gameObject)
         {
             if (_currentWeapon != null)
