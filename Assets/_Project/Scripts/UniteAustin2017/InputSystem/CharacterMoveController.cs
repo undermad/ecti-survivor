@@ -9,7 +9,7 @@ using UnityEngine.Events;
 
 namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem
 {
-    public class CharacterController : ValidatedMonoBehaviour
+    public class CharacterMovementController : ValidatedMonoBehaviour
     {
         [SerializeField, Self] private Rigidbody2D rigidbody2D;
         
