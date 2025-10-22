@@ -1,52 +1,47 @@
 ﻿using System;
+using System.Collections.Generic;
 using Explorer._Project.Scripts.UniteAustin2017.EventSystem.EventBus;
 using Explorer._Project.Scripts.UniteAustin2017.InputSystem.Events;
+using Explorer._Project.Scripts.UniteAustin2017.InputSystem.InputActions;
+using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem
 {
-    public class InputManager : MonoBehaviour
+    public class InputManager : ValidatedMonoBehaviour
     {
-        public InputActionAsset inputActionAsset;
-        private InputAction move;
+        [SerializeField, Anywhere] private InputActionAsset inputActionAsset;
+        [SerializeField, Anywhere] private InputData inputData;
+        private List<IAction> actions;
+        private const string InputActionName = "Player";
 
         private void Awake()
         {
-            move = inputActionAsset.FindAction("Move");
+            actions = new List<IAction>
+            {
+                new Move(inputActionAsset.FindAction("Move"), inputData),
+                new Fire(inputActionAsset.FindAction("Fire"), inputData)
+            };
         }
 
         private void OnEnable()
         {
-            inputActionAsset.FindActionMap("Player").Enable();
-            move.started += OnMovePerformed;
-            move.performed += OnMovePerformed;
-            move.canceled += OnMovePerformed;
+            inputActionAsset.FindActionMap(InputActionName).Enable();
+            foreach (var action in actions)
+            {
+                action.Enable();
+            }
         }
 
         private void OnDisable()
         {
-            move.performed -= OnMovePerformed;
-            inputActionAsset.FindActionMap("Player").Disable();
+            foreach (var action in actions)
+            {
+                action.Disable();
+            }
+            inputActionAsset.FindActionMap(InputActionName).Disable();
         }
 
-        private void OnMovePerformed(InputAction.CallbackContext context)
-        {
-            switch (context.phase)
-            {
-                case InputActionPhase.Performed:
-                case InputActionPhase.Started:
-                    var value = context.ReadValue<Vector2>();
-                    EventBus<MoveEvent>.Publish(new MoveEvent { Direction = value });
-                    break;
-                case InputActionPhase.Canceled:
-                    EventBus<MoveEvent>.Publish(new MoveEvent { Direction = Vector2.zero });
-                    break;
-                case InputActionPhase.Disabled:
-                case InputActionPhase.Waiting:
-                default:
-                    break;
-            }
-        }
     }
 }
