@@ -16,7 +16,7 @@ namespace Explorer._Project.Scripts.Enemy.fsm
     private StateMachine fsm;
 
     // Parameters (can be changed in the inspector)
-    public float searchSpotRange = 10;
+    public float searchSpotRange = 2;
     public float attackRange = 3;
 
     public float searchTime = 20;  // in seconds
@@ -82,9 +82,9 @@ namespace Explorer._Project.Scripts.Enemy.fsm
         fsm.AddTriggerTransition("PlayerSpotted", "Patrol", "Chase");
         fsm.AddTwoWayTransition("Chase", "Fight", t => distanceToPlayer <= attackRange);
         fsm.AddTransition("Chase", "Search",
-            t => distanceToPlayer > searchSpotRange,
+            condition: c => distanceToPlayer > searchSpotRange,
             onTransition: t => lastSeenPlayerPosition = playerPosition);
-        fsm.AddTransition("Search", "Chase", t => distanceToPlayer <= searchSpotRange);
+        fsm.AddTransition("Search", "Chase", condition: c => distanceToPlayer <= searchSpotRange);
         fsm.AddTransition(new TransitionAfter("Search", "Patrol", searchTime));
 
         fsm.Init();
@@ -93,14 +93,18 @@ namespace Explorer._Project.Scripts.Enemy.fsm
     void Update()
     {
         fsm.OnLogic();
+        Debug.Log("Distance to Player: " + distanceToPlayer + "SearchSpotRange: " + searchSpotRange + "State: " + fsm.ActiveStateName);
         
         // stateDisplayText.text = fsm.GetActiveHierarchyPath();
     }
 
     // Triggers the `PlayerSpotted` event.
     void OnTriggerEnter2D(Collider2D other) {
+        
+        Debug.Log(other.tag);
         if (other.CompareTag("Player"))
         {
+            Debug.Log("player spotted");
             fsm.Trigger("PlayerSpotted");
         }
     }

@@ -7,7 +7,7 @@ using Explorer._Project.Scripts.Utils.Assembly;
 using UnityEditor;
 using UnityEngine;
 
-namespace Explorer._Project.Scripts.EventBus
+namespace Explorer._Project.Scripts.UniteAustin2017.EventSystem.EventBus
 {
     public static class EventBusUtils
     {

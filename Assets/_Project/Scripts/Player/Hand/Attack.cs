@@ -3,6 +3,7 @@ using Explorer._Project.Scripts.Enemy;
 using Explorer._Project.Scripts.EventBus;
 using Explorer._Project.Scripts.Player.Events;
 using Explorer._Project.Scripts.Player.Hand.States;
+using Explorer._Project.Scripts.UniteAustin2017.EventSystem.EventBus;
 using Explorer._Project.Scripts.Utils;
 using KBCore.Refs;
 using UnityEngine;
@@ -47,17 +48,14 @@ namespace Explorer._Project.Scripts.Player.Hand
 
         private void Update()
         {
-
             var animationState = animator.GetCurrentAnimatorStateInfo(0);
             var normalizedTime = animationState.normalizedTime;
             if (animationState.IsName(AnimationsStatesRegistry.WeaponAttack))
             {
                 if (Mathf.FloorToInt(normalizedTime) > Mathf.FloorToInt(_lastNormalizedTime))
                 {
-                    _hittedEnemies.Clear();
                 }
             }
-
             _lastNormalizedTime = normalizedTime;
         }
 
@@ -65,18 +63,19 @@ namespace Explorer._Project.Scripts.Player.Hand
         {
             if (!other.CompareTag(TagsRegistry.Enemy) || _hittedEnemies.Contains(other.gameObject))
                 return;
+            
             _hittedEnemies.Add(other.gameObject);
-
+            
             var enemyAttributes = other.GetComponent<Attributes>();
             var healthBar = other.GetComponentInChildren<HealthBar>();
-
+            
             var currentHealth = enemyAttributes.CurrentHealth;
             if (currentHealth - 10 <= 0)
             {
                 Destroy(other.gameObject);
                 return;
             }
-
+            
             Debug.Log("Hit");
             healthBar.UpdateHealthBar(enemyAttributes.MaxHealth, enemyAttributes.CurrentHealth - 10);
             enemyAttributes.CurrentHealth -= 10;
@@ -87,6 +86,7 @@ namespace Explorer._Project.Scripts.Player.Hand
             if (e.StateName == WeaponAttackState.StateName)
             {
                 _lastNormalizedTime = 0f;
+                _hittedEnemies.Clear();
             }
         }
 
