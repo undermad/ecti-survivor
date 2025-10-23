@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Explorer._Project.Scripts.UniteAustin2017.EventSystem.EventBus;
-using Explorer._Project.Scripts.UniteAustin2017.InputSystem.Events;
-using Explorer._Project.Scripts.UniteAustin2017.InputSystem.InputActions;
+﻿using System.Collections.Generic;
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,22 +9,34 @@ namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem
     {
         [SerializeField, Anywhere] private InputActionAsset inputActionAsset;
         [SerializeField, Anywhere] private InputData inputData;
-        private List<IAction> actions;
+        [SerializeField, Anywhere] private List<GameInputAction> actions = new();
+
+        private readonly List<GameInputAction> runtimeActions = new();
         private const string InputActionName = "Player";
 
         private void Awake()
         {
-            actions = new List<IAction>
+            foreach (var asset in actions)
             {
-                new Move(inputActionAsset.FindAction("Move"), inputData),
-                new Fire(inputActionAsset.FindAction("Fire"), inputData)
-            };
-        }
+                if (asset == null)
+                {
+                    Debug.unityLogger.LogWarning("Input", "Input action asset is null");
+                    continue;
+                };
 
+                var inputAction = inputActionAsset.FindAction(asset.name, throwIfNotFound: true);
+                var runtime = Instantiate(asset);
+                runtime.name = asset.name + " (Runtime)";
+                runtime.Initialize(inputAction, inputData);
+                runtimeActions.Add(runtime);
+            }
+        }
+        
+        
         private void OnEnable()
         {
             inputActionAsset.FindActionMap(InputActionName).Enable();
-            foreach (var action in actions)
+            foreach (var action in runtimeActions)
             {
                 action.Enable();
             }
@@ -36,7 +44,7 @@ namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem
 
         private void OnDisable()
         {
-            foreach (var action in actions)
+            foreach (var action in runtimeActions)
             {
                 action.Disable();
             }

@@ -5,13 +5,9 @@ using UnityEngine.InputSystem;
 
 namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem.InputActions
 {
-    public class Move : GameInputAction
+    [CreateAssetMenu(fileName = "Fire", menuName = "Input/Actions/Move")]
+    public class Move :  GameInputAction
     {
-        public Move(InputAction inputAction, InputData inputData)
-            : base(inputAction, inputData)
-        {
-        }
-
         public override void OnAction(InputAction.CallbackContext context)
         {
             switch (context.phase)

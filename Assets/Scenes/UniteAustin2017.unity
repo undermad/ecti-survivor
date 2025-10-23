@@ -593,6 +593,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActionAsset: {fileID: -944628639613478452, guid: d1b14ccba71bf014fa2e82fff6cde7af, type: 3}
   inputData: {fileID: 11400000, guid: f90ff55002c41e8438998a42381870d4, type: 2}
+  actions:
+  - {fileID: 11400000, guid: f7ad6e8306e9ae5429630c81059af8ee, type: 2}
+  - {fileID: 11400000, guid: fb38e71f56b69564888601351e98753a, type: 2}
 --- !u!1 &1008499891
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,6 +838,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1021991354}
   - component: {fileID: 1021991355}
+  - component: {fileID: 1021991356}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -870,6 +874,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 7022243172893031554, guid: 4b3cffc8efe0d2d4e96d76dfe16f2eb1, type: 3}
+--- !u!114 &1021991356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021991353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ee68c9a1a334e63955c7cf19b7adc23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 215b1f44a7a4da74abf7f3c47e3ed174, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1021991355}
+        m_TargetAssemblyTypeName: Explorer._Project.Scripts.UniteAustin2017.Spawner.Spawner,
+          Assembly-CSharp
+        m_MethodName: Spawn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1794165114
 GameObject:
   m_ObjectHideFlags: 0

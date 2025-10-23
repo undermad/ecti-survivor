@@ -5,29 +5,37 @@ using UnityEngine.InputSystem;
 
 namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem
 {
-    public abstract class GameInputAction : IAction
+    public abstract class GameInputAction : ScriptableObject, IAction
     {
-        private readonly InputAction inputAction;
-        protected readonly InputData InputData;
+        [NonSerialized] private InputAction _inputAction;
+        [NonSerialized] protected InputData InputData;
 
-        protected GameInputAction(InputAction inputAction, InputData inputData)
+        public void Initialize(InputAction inputAction, InputData inputData)
         {
-            this.inputAction = inputAction;
-            this.InputData = inputData;
+            _inputAction = inputAction;
+            InputData = inputData;
         }
 
         public void Enable()
         {
-            inputAction.started += OnAction;
-            inputAction.performed += OnAction;
-            inputAction.canceled += OnAction;
+            if (_inputAction == null)
+            {
+                Debug.LogWarning($"{name}: Enable() called before Initialize().");
+                return;
+            }
+
+            _inputAction.started += OnAction;
+            _inputAction.performed += OnAction;
+            _inputAction.canceled += OnAction;
         }
 
         public void Disable()
         {
-            inputAction.started -= OnAction;
-            inputAction.performed -= OnAction;
-            inputAction.canceled -= OnAction;
+            if (_inputAction == null) return;
+
+            _inputAction.started -= OnAction;
+            _inputAction.performed -= OnAction;
+            _inputAction.canceled -= OnAction;
         }
 
         public abstract void OnAction(InputAction.CallbackContext context);
