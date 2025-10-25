@@ -9,7 +9,7 @@ namespace Explorer._Scripts.Explorer.Components.Health
         public int currentHealthPoints;
         public int maxHealthPoints;
 
-        public float GetHealthPercentage() => (float) maxHealthPoints / currentHealthPoints * 100f;
+        public float GetHealthPercentage() => (float) currentHealthPoints / maxHealthPoints * 100f;
             
     }
 }

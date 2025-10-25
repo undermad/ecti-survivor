@@ -118,7 +118,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &3580770025156487469
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -177,14 +177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d9f8982cbd147a984190feefdb67cab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth:
-    useConstant: 1
-    constantValue: 0
-    variable: {fileID: 0}
-  movementSpeed:
-    useConstant: 1
-    constantValue: 100
-    variable: {fileID: 11400000, guid: a58a67a94d3a1cf44a043f76cbdd70f6, type: 2}
 --- !u!114 &5776079947190141426
 MonoBehaviour:
   m_ObjectHideFlags: 0
