@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff68f5d5a20748bd8dd91e9f992eb36f, type: 3}
+  m_Name: GE_ManaCost20
+  m_EditorClassIdentifier: 
+  DisplayName: GE_ManaCost20
+  GrantedTags:
+    tags: []
+  RequiredTargetTags:
+    tags: []
+  BlockedTargetTags:
+    tags: []
+  Policy: 0
+  DurationSeconds:
+    Base: 0
+    PerLevel: 0
+  IsPeriodic: 0
+  Period:
+    Base: 1
+    PerLevel: 0
+  CanStack: 0
+  MaxStacks: 1
+  RefreshDurationOnStack: 1
+  Modifiers:
+  - AttributeName: Mana
+    Operation: 0
+    Magnitude:
+      Base: -10
+      PerLevel: 0

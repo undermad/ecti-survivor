@@ -12,8 +12,11 @@ GameObject:
   - component: {fileID: 7840969666315531888}
   - component: {fileID: 8346707805927518786}
   - component: {fileID: 3580770025156487469}
+  - component: {fileID: 8470790988757892125}
   - component: {fileID: 7199172879961390986}
   - component: {fileID: 5776079947190141426}
+  - component: {fileID: 8672742523488781552}
+  - component: {fileID: 2360781557545368489}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -165,6 +168,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &8470790988757892125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693483567927920917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef6250efc0f04460ba5a78edf15801ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7199172879961390986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d9f8982cbd147a984190feefdb67cab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  persistentId: {fileID: 8470790988757892125}
 --- !u!114 &5776079947190141426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,6 +207,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody2D: {fileID: 8346707805927518786}
   inputData: {fileID: 11400000, guid: f90ff55002c41e8438998a42381870d4, type: 2}
+--- !u!114 &8672742523488781552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693483567927920917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11cc66ea031944b7af5fb59a87f7ec3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  persistentId: {fileID: 8470790988757892125}
+  Attributes:
+  - {fileID: 11400000, guid: 9b900b29a4b40ea4bae3b14b3a65fd40, type: 2}
+  GrantedAbilities: []
+  Tags:
+    tags: []
+--- !u!114 &2360781557545368489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693483567927920917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 378f42a8866477645837764c8cbe47ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floatingHealthBarPrefab: {fileID: 8627856272220587160, guid: ad1ea5fe7a0af0d4fbfbc42b1c656279, type: 3}
+  offSet: {x: 0, y: 0}
+  persistentId: {fileID: 8470790988757892125}
 --- !u!1001 &2652182966634233755
 PrefabInstance:
   m_ObjectHideFlags: 0

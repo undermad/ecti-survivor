@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Explorer._Scripts.Explorer.Components.Character;
+using Explorer._Scripts.Explorer.Objects;
 using KBCore.Refs;
 using UnityEngine;
 
@@ -7,13 +9,15 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 {
     public class AbilitySystemComponent : MonoBehaviour
     {
+        [SerializeField, Anywhere] private PersistentId persistentId;
         public List<AttributeSet> Attributes = new();
         public List<GameplayAbility> GrantedAbilities = new();
         public GameplayTagContainer Tags = new();
-        
+
+
         // Runtime state
-        private readonly Dictionary<string, Attribute> _attributes = new(StringComparer.OrdinalIgnoreCase);
-        private readonly List<ActiveEffect> _activeEffects = new();
+        private readonly Dictionary<string, Attribute> attributes = new(StringComparer.OrdinalIgnoreCase);
+        private readonly List<ActiveEffect> activeEffects = new();
 
         private void Awake()
         {
@@ -21,12 +25,15 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
             {
                 var dictionary = set.InstantiateDict();
                 foreach (var pair in dictionary)
-                    _attributes[pair.Key] = pair.Value;
+                    attributes[pair.Key] = pair.Value;
             }
+        }
 
-            foreach (var attribute in _attributes.Values)
+        private void Start()
+        {
+            foreach (var attribute in attributes.Values)
             {
-                attribute.Clamp();
+                attribute.SetCurrentValue(attribute.CurrentValue, persistentId.ID);
             }
         }
 
@@ -35,102 +42,112 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
         {
             TickEffects(Time.deltaTime);
         }
-
-
-// ---- Public API ----
-        public Attribute GetAttribute(string name) => _attributes.TryGetValue(name, out var a) ? a : null;
-        public float GetAttributeValue(string name) => GetAttribute(name)?.CurrentValue ?? 0f;
-        public void SetAttributeBase(string name, float baseValue)
-        {
-            if (_attributes.TryGetValue(name, out var a)) { a.BaseValue = baseValue; a.Clamp(); }
-        }
-
-
-        public GameplayEffectSpec MakeSpec(GameplayEffectDef def, float level, GameObject instigator)
-        {
-            var spec = new GameplayEffectSpec { Def = def, Level = level, Instigator = instigator };
-            if (def != null && def.Modifiers != null)
-            {
-                foreach (var mod in def.Modifiers)
-                    spec.ResolvedMagnitudes[mod.AttributeName] = mod.Magnitude.Evaluate(level);
-            }
-            return spec;
-        }
         
-        public bool ApplyEffectSpec(GameplayEffectSpec spec, GameObject targetObj = null)
+        public Attribute GetAttribute(string attributeName) => attributes.GetValueOrDefault(attributeName);
+        public float GetAttributeValue(string attributeName) => GetAttribute(attributeName)?.CurrentValue ?? 0f;
+
+
+        public GameplayEffectSpec MakeSpec(GameplayEffectDef definition, int level, GameObject instigator)
         {
-            var target = targetObj ? targetObj.GetComponent<AbilitySystemComponent>() : this;
-            if (target == null) target = this;
-
-
-// Check tag requirements on target
-            foreach (var t in spec.Def.RequiredTargetTags?.Tags ?? Array.Empty<GameplayTag>())
-                if (!target.Tags.HasTag(t)) return false;
-            foreach (var t in spec.Def.BlockedTargetTags?.Tags ?? Array.Empty<GameplayTag>())
-                if (target.Tags.HasTag(t)) return false;
-
-
-// Grant tags immediately
-            foreach (var t in spec.Def.GrantedTags?.Tags ?? Array.Empty<GameplayTag>())
-                target.Tags.AddTag(t);
-
-
-            if (spec.Def.Policy == DurationPolicy.Instant)
+            var specification = new GameplayEffectSpec
             {
-                ApplyModifiers(target, spec);
+                Def = definition,
+                Level = level,
+                Instigator = instigator
+            };
+            if (definition != null && definition.Modifiers != null)
+            {
+                foreach (var modifier in definition.Modifiers)
+                {
+                    specification.ResolvedMagnitudes[modifier.AttributeName] = modifier.Magnitude.Evaluate(level);
+                }
+            }
+
+            return specification;
+        }
+
+        public bool ApplyEffectSpec(GameplayEffectSpec specification, GameObject targetObject = null)
+        {
+            var target = targetObject ? targetObject.GetComponent<AbilitySystemComponent>() : this;
+            if (target == null)
+            {
+                target = this;
+            }
+
+            // Check tag requirements on target
+            foreach (var requiredTag in specification.Def.RequiredTargetTags?.Tags ?? Array.Empty<GameplayTag>())
+            {
+                if (!target.Tags.HasTag(requiredTag))
+                    return false;
+            }
+
+            foreach (var blockingTag in specification.Def.BlockedTargetTags?.Tags ?? Array.Empty<GameplayTag>())
+            {
+                if (target.Tags.HasTag(blockingTag))
+                    return false;
+            }
+
+            // Grant tags immediately
+            foreach (var grantedTag in specification.Def.GrantedTags?.Tags ?? Array.Empty<GameplayTag>())
+            {
+                target.Tags.AddTag(grantedTag);
+            }
+
+            if (specification.Def.Policy == DurationPolicy.Instant)
+            {
+                ApplyModifiers(target, specification);
                 return true;
             }
 
-
-// Check if there is an existing stackable effect of same def
-            var existing = _activeEffects.Find(ae => ae.Spec.Def == spec.Def && ae.Spec.Instigator == spec.Instigator && ae.Spec.Level == spec.Level);
-            if (existing != null && spec.Def.CanStack)
+            // Check if there is an existing stackable effect of same definition
+            var existing = activeEffects.Find(activeEffect =>
+                activeEffect.Spec.Def == specification.Def && activeEffect.Spec.Instigator == specification.Instigator &&
+                activeEffect.Spec.Level == specification.Level);
+            if (existing != null && specification.Def.CanStack)
             {
-                existing.stacks = Mathf.Min(existing.stacks + 1, Mathf.Max(1, spec.Def.MaxStacks));
-                if (spec.Def.RefreshDurationOnStack)
-                    existing.timeRemaining = spec.Def.GetDuration(spec.Level);
+                existing.stacks = Mathf.Min(existing.stacks + 1, Mathf.Max(1, specification.Def.MaxStacks));
+                if (specification.Def.RefreshDurationOnStack)
+                {
+                    existing.timeRemaining = specification.Def.GetDuration(specification.Level);
+                }
                 return true;
             }
 
-
-            var active = new ActiveEffect(spec);
-            _activeEffects.Add(active);
-// Apply on‑application modifiers if desired (common GAS pattern: apply once and/or periodic)
-            ApplyModifiers(target, spec);
+            var active = new ActiveEffect(specification);
+            activeEffects.Add(active);
+            // Apply on‑application modifiers if desired (common GAS pattern: apply once and/or periodic)
+            ApplyModifiers(target, specification);
             return true;
         }
-        
+
         private void ApplyModifiers(AbilitySystemComponent target, GameplayEffectSpec spec)
         {
             foreach (var mod in spec.Def.Modifiers)
             {
                 var magnitude = spec.ResolvedMagnitudes[mod.AttributeName];
-                var attr = target.GetAttribute(mod.AttributeName);
-                if (attr == null) continue; // optional: create on the fly
+                var attribute = target.GetAttribute(mod.AttributeName);
+                if (attribute == null) continue; // optional: create on the fly
 
 
                 switch (mod.Operation)
                 {
                     case ModifierOp.Add:
-                        attr.CurrentValue += magnitude; break;
+                        attribute.SetCurrentValue(attribute.CurrentValue + magnitude, persistentId.ID); break;
                     case ModifierOp.Multiply:
-                        attr.CurrentValue *= magnitude; break;
+                        attribute.SetCurrentValue(attribute.CurrentValue * magnitude, persistentId.ID); break;
                     case ModifierOp.Override:
-                        attr.CurrentValue = magnitude; break;
-                    case ModifierOp.ClampMin:
-                        attr.Min = Mathf.Max(attr.Min, magnitude); break;
-                    case ModifierOp.ClampMax:
-                        attr.Max = Mathf.Min(attr.Max, magnitude); break;
+                        attribute.SetCurrentValue(magnitude, persistentId.ID); break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-                attr.Clamp();
             }
         }
-        
+
         private void TickEffects(float deltaTime)
         {
-            for (var index = _activeEffects.Count - 1; index >= 0; index--)
+            for (var index = activeEffects.Count - 1; index >= 0; index--)
             {
-                var activeEffect = _activeEffects[index];
+                var activeEffect = activeEffects[index];
                 if (activeEffect.Spec.Def.Policy == DurationPolicy.Duration)
                 {
                     activeEffect.timeRemaining -= deltaTime;
@@ -154,11 +171,12 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
                     {
                         Tags.RemoveTag(t);
                     }
-                    _activeEffects.RemoveAt(index);
+
+                    activeEffects.RemoveAt(index);
                 }
             }
         }
-        
+
         public bool TryActivateAbility(GameplayAbility ability, GameObject target = null)
         {
             if (ability == null) return false;
@@ -167,6 +185,5 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
             ability.Activate(this, target);
             return true;
         }
-        
     }
 }

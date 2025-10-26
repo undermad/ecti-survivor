@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 {
-    [CreateAssetMenu(menuName = "GAS/GameplayEffect", fileName = "GameplayEffect")]
+    [CreateAssetMenu(menuName = "GAS/GameplayEffectDef", fileName = "GameplayEffectDef")]
     public class GameplayEffectDef : ScriptableObject
     {
         [Header("Meta")]
@@ -28,12 +28,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 
 
         [Header("Modifiers")]
-        public List_ATTRIBUTE_ Modifiers = new();
-
-
-        [Serializable]
-        public class List_ATTRIBUTE_ : List<AttributeModifier> {} // for nicer inspector
-
+        public List<AttributeModifier> Modifiers = new();
 
         public float GetDuration(float level) => Policy == DurationPolicy.Duration ? Mathf.Max(0, DurationSeconds.Evaluate(level)) : 0f;
         public float GetPeriod(float level) => Mathf.Max(0.0001f, Period.Evaluate(level));

@@ -19,7 +19,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 
         public List<GameplayEffectDef> EffectsToApply = new();
 
-        public float AbilityLevel = 1f;
+        public int AbilityLevel = 1;
 
         public virtual bool CanActivate(AbilitySystemComponent abilitySystemComponent)
         {

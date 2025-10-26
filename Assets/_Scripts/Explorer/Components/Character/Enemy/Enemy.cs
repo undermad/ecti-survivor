@@ -1,15 +1,10 @@
-﻿using System;
+﻿using KBCore.Refs;
 
 namespace Explorer._Scripts.Explorer.Components.Character.Enemy
 {
-    public class Enemy : CharacterBase
+    public class Enemy : ValidatedMonoBehaviour
     {
-        
-        
-        
-        
-        
-        
+
         
     }
 }

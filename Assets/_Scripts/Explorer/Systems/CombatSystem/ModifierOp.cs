@@ -2,6 +2,6 @@
 {
     public enum ModifierOp
     {
-        Add, Multiply, Override, ClampMin, ClampMax
+        Add, Multiply, Override
     }
 }

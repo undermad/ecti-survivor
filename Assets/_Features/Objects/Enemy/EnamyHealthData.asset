@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74756914f4904b3497bcf2ba322b1148, type: 3}
   m_Name: EnamyHealthData
   m_EditorClassIdentifier: 
-  currentHealthPoints: 100
+  currentHealthPoints: 50
   maxHealthPoints: 100

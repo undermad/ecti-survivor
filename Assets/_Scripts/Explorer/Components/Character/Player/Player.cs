@@ -1,9 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using Explorer._Scripts.Explorer.Objects;
+using KBCore.Refs;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Explorer._Project.Scripts.UniteAustin2017.Player
+namespace Explorer._Scripts.Explorer.Components.Character.Player
 {
-    public class Player : MonoBehaviour
+    public class Player : ValidatedMonoBehaviour, IGetObjectId
     {
-
+        [SerializeField, Anywhere] private PersistentId persistentId;
+        
+        public Guid GetObjectId()
+        {
+            return persistentId.ID;
+        }
     }
 }

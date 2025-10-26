@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Explorer._Scripts.Explorer.Components.Character
+namespace Explorer._Scripts.Explorer.Objects
 {
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-10000)]
