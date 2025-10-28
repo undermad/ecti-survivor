@@ -8,7 +8,7 @@ namespace Explorer._Scripts.Explorer.Components.Character.Player
 {
     public class Player : ValidatedMonoBehaviour, IGetObjectId
     {
-        [SerializeField, Anywhere] private PersistentId persistentId;
+        [SerializeField, Parent] private PersistentId persistentId;
         
         public Guid GetObjectId()
         {

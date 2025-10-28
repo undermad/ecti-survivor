@@ -1,20 +1,44 @@
 ﻿using System;
-using Explorer._Project.Scripts.EventBus;
-using Explorer._Project.Scripts.Player.Events;
 using Explorer._Project.Scripts.UniteAustin2017.EventSystem.EventBus;
-using Explorer._Project.Scripts.UniteAustin2017.InputSystem.Events;
+using Explorer._Project.Scripts.UniteAustin2017.InputSystem;
+using Explorer._Scripts.Explorer.Objects;
+using Explorer._Scripts.Explorer.Systems.CombatSystem.Events;
 using KBCore.Refs;
 using UnityEngine;
 
-namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem
+namespace Explorer._Scripts.Explorer.Components.PlayerController
 {
     public class CharacterMoveController : ValidatedMonoBehaviour
     {
+        [SerializeField, Parent] private PersistentId persistentId;
         [SerializeField, Self] private Rigidbody2D rigidbody2D;
         [SerializeField, Anywhere] private InputData inputData;
         
         // scriptable object
         private float movementSpeed = 5.0f;
+        
+        private EventBinding<AttributeChangedEvent> attributeChangedEventBinding;
+        
+
+        private void OnEnable()
+        {
+            attributeChangedEventBinding = new EventBinding<AttributeChangedEvent>(HandleOnAttributeChanged);
+            EventBus<AttributeChangedEvent>.Subscribe(persistentId.ID, attributeChangedEventBinding);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<AttributeChangedEvent>.UnSubscribe(persistentId.ID, attributeChangedEventBinding);
+        }
+
+
+        private void HandleOnAttributeChanged(AttributeChangedEvent payload)
+        {
+            if (payload.AttributeName.Equals("MovementSpeed"))
+            {
+                movementSpeed = payload.NewValue;
+            }
+        }
 
         private void FixedUpdate()
         {

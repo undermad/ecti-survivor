@@ -11,25 +11,29 @@ using UnityEngine.Serialization;
 
 namespace Explorer._Scripts.Explorer.Components.Health
 {
-    [RequireComponent(typeof(PersistentId))]
-    public class HealthComponent : MonoBehaviour
+    public class HealthComponent : ValidatedMonoBehaviour
     {
+        [SerializeField, Parent] private PersistentId persistentId;
         [SerializeField, Anywhere] private FloatingHealthBar floatingHealthBarPrefab;
         [SerializeField] private Vector2 offSet;
 
-        [SerializeField, Anywhere] private PersistentId persistentId;
+        [SerializeField, Anywhere] private AttributeNameData healthAttributeName;
+        [SerializeField, Anywhere] private AttributeNameData maxHealthAttributeName;
+        
+        
 
         private FloatingHealthBar healthBar;
-        
+
         private EventBinding<AttributeChangedEvent> attributeChangedEventBinding;
-        
+
         private float CurrentHealth;
         private float MaxHealth;
-        
+
         private void Awake()
         {
-            var position = (Vector2) transform.position + offSet;
-            healthBar = Instantiate(floatingHealthBarPrefab, position, Quaternion.identity);
+            healthBar = Instantiate(floatingHealthBarPrefab, transform);
+            var position = (Vector2)transform.position + offSet;
+            healthBar.transform.position = position;
         }
 
         private void OnEnable()
@@ -45,29 +49,23 @@ namespace Explorer._Scripts.Explorer.Components.Health
 
         private void HandleOnAttributeChanged(AttributeChangedEvent payload)
         {
-            CurrentHealth = payload.NewValue;
-            MaxHealth = payload.Max;
+            if (payload.AttributeName.Equals(healthAttributeName.Value))
+            {
+                CurrentHealth = payload.NewValue;
+                UpdateHealthBar();
+            }
             
-            SetHealth();
+            if (payload.AttributeName.Equals(maxHealthAttributeName.Value))
+            {
+                MaxHealth = payload.NewValue;
+                UpdateHealthBar();
+            }
         }
 
-        private void Start()
-        {
-
-        }
-
-        private void SetHealth()
+        private void UpdateHealthBar()
         {
             var healthPercents = (CurrentHealth / MaxHealth) * 100;
             healthBar.SetHealth(healthPercents);
         }
-
-        public void ApplyDamage(int damage)
-        {
-            // healthData.currentHealthPoints -= damage;
-            // var healthPercents = healthData.GetHealthPercentage();
-            // healthBar.SetHealth(healthPercents);
-        }
-        
     }
 }

@@ -8,12 +8,10 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
     [Serializable]
     public class Attribute
     {
-        [SerializeField] private string name;
+        [SerializeField] private AttributeNameData name;
         [SerializeField] private float currentValue;
-        [SerializeField] private float min;
-        [SerializeField] private float max;
 
-        public string Name
+        public AttributeNameData Name
         {
             get => name;
             private set => name = value;
@@ -25,45 +23,25 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
             private set => currentValue = value;
         }
 
-        public float Min
+        public Attribute(AttributeNameData attributeName, float currentValue)
         {
-            get => min;
-            private set => min = value;
-        }
-
-        public float Max
-        {
-            get => max;
-            private set => max = value;
-        }
-
-        public Attribute(
-            string name,
-            float currentValue,
-            float min = float.NegativeInfinity,
-            float max = float.PositiveInfinity)
-        {
-            Name = name;
+            Name = attributeName;
             CurrentValue = currentValue;
-            Min = min;
-            Max = max;
         }
 
-        public void SetCurrentValue(float value, Guid owner)
+        public void SetCurrentValue(float newValue, Guid owner)
         {
-            Debug.unityLogger.Log($"Value: {value}, Owner: {owner}");
+            Debug.unityLogger.Log($"Value: {newValue}, Owner: {owner}");
             var oldValue = CurrentValue;
-            CurrentValue = Mathf.Clamp(value, Min, Max);
+            CurrentValue = newValue;
             EventBus<AttributeChangedEvent>.Publish(
                 owner,
                 new AttributeChangedEvent
                 {
                     Owner = owner,
-                    AttributeName = Name,
-                    NewValue = CurrentValue,
+                    AttributeName = Name.Value,
+                    NewValue = newValue,
                     OldValue = oldValue,
-                    Min = Min,
-                    Max = Max,
                 });
         }
     }

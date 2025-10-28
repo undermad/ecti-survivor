@@ -9,7 +9,5 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem.Events
         public string AttributeName;
         public float NewValue;
         public float OldValue;
-        public float Min;
-        public float Max;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 {
@@ -15,8 +14,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
             var dictionary = new Dictionary<string, Attribute>(StringComparer.OrdinalIgnoreCase);
             foreach (var attribute in attributes)
             {
-                dictionary[attribute.Name] =
-                    new Attribute(attribute.Name, attribute.CurrentValue, attribute.Min, attribute.Max);
+                dictionary[attribute.Name.Value] = new Attribute(attribute.Name, attribute.CurrentValue);
             }
             return dictionary;
         }

@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using Explorer._Scripts.Explorer.Components.Character;
 using Explorer._Scripts.Explorer.Objects;
+using Explorer._Scripts.Explorer.Systems.LifecycleManager;
 using KBCore.Refs;
 using UnityEngine;
 
 namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 {
-    public class AbilitySystemComponent : MonoBehaviour
+    public class AbilitySystemComponent : MonoBehaviour, IUpdateObserver
     {
-        [SerializeField, Anywhere] private PersistentId persistentId;
+        [SerializeField, Parent] private PersistentId persistentId;
         public List<AttributeSet> Attributes = new();
         public List<GameplayAbility> GrantedAbilities = new();
         public GameplayTagContainer Tags = new();
-
 
         // Runtime state
         private readonly Dictionary<string, Attribute> attributes = new(StringComparer.OrdinalIgnoreCase);
@@ -21,12 +20,25 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 
         private void Awake()
         {
+            
             foreach (var set in Attributes)
             {
                 var dictionary = set.InstantiateDict();
                 foreach (var pair in dictionary)
+                {
                     attributes[pair.Key] = pair.Value;
+                }
             }
+        }
+
+        private void OnEnable()
+        {
+            UpdateManager.Register(this);
+        }
+
+        private void OnDisable()
+        {
+            UpdateManager.Unregister(this);
         }
 
         private void Start()
@@ -36,13 +48,12 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
                 attribute.SetCurrentValue(attribute.CurrentValue, persistentId.ID);
             }
         }
-
-
-        private void Update()
+        
+        public void CustomUpdate()
         {
             TickEffects(Time.deltaTime);
         }
-        
+
         public Attribute GetAttribute(string attributeName) => attributes.GetValueOrDefault(attributeName);
         public float GetAttributeValue(string attributeName) => GetAttribute(attributeName)?.CurrentValue ?? 0f;
 
@@ -59,7 +70,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
             {
                 foreach (var modifier in definition.Modifiers)
                 {
-                    specification.ResolvedMagnitudes[modifier.AttributeName] = modifier.Magnitude.Evaluate(level);
+                    specification.ResolvedMagnitudes[modifier.AttributeName.Value] = modifier.Magnitude.Evaluate(level);
                 }
             }
 
@@ -90,7 +101,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
             // Grant tags immediately
             foreach (var grantedTag in specification.Def.GrantedTags?.Tags ?? Array.Empty<GameplayTag>())
             {
-                target.Tags.AddTag(grantedTag);
+                target.Tags.AddTag(grantedTag, persistentId.ID);
             }
 
             if (specification.Def.Policy == DurationPolicy.Instant)
@@ -99,10 +110,13 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
                 return true;
             }
 
+
             // Check if there is an existing stackable effect of same definition
             var existing = activeEffects.Find(activeEffect =>
-                activeEffect.Spec.Def == specification.Def && activeEffect.Spec.Instigator == specification.Instigator &&
+                activeEffect.Spec.Def == specification.Def &&
+                activeEffect.Spec.Instigator == specification.Instigator &&
                 activeEffect.Spec.Level == specification.Level);
+
             if (existing != null && specification.Def.CanStack)
             {
                 existing.stacks = Mathf.Min(existing.stacks + 1, Mathf.Max(1, specification.Def.MaxStacks));
@@ -110,6 +124,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
                 {
                     existing.timeRemaining = specification.Def.GetDuration(specification.Level);
                 }
+
                 return true;
             }
 
@@ -124,8 +139,11 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
         {
             foreach (var mod in spec.Def.Modifiers)
             {
-                var magnitude = spec.ResolvedMagnitudes[mod.AttributeName];
-                var attribute = target.GetAttribute(mod.AttributeName);
+                var magnitude = spec.ResolvedMagnitudes[mod.AttributeName.Value];
+                
+                Debug.unityLogger.Log($"Magnitude: {magnitude}");
+                
+                var attribute = target.GetAttribute(mod.AttributeName.Value);
                 if (attribute == null) continue; // optional: create on the fly
 
 
@@ -167,12 +185,41 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 
                 if (activeEffect.IsExpired)
                 {
-                    foreach (var t in activeEffect.Spec.Def.GrantedTags?.Tags ?? Array.Empty<GameplayTag>())
+                    foreach (var grantedTag in activeEffect.Spec.Def.GrantedTags?.Tags ?? Array.Empty<GameplayTag>())
                     {
-                        Tags.RemoveTag(t);
+                        Tags.RemoveTag(grantedTag, persistentId.ID);
                     }
 
+                    if (activeEffect.Spec.Def.Policy.Equals(DurationPolicy.Duration) && !activeEffect.Spec.Def.IsPeriodic)
+                    {
+                        RemoveModifiers(activeEffect);
+                    }
                     activeEffects.RemoveAt(index);
+                }
+            }
+        }
+
+        private void RemoveModifiers(ActiveEffect activeEffect)
+        {
+            foreach (var modifier in activeEffect.Spec.Def.Modifiers)
+            {
+                var attribute = GetAttribute(modifier.AttributeName.Value);
+                var magnitude = activeEffect.Spec.ResolvedMagnitudes[modifier.AttributeName.Value];
+                if (attribute == null) continue;
+
+                switch (modifier.Operation)
+                {
+                    case ModifierOp.Add:
+                        attribute.SetCurrentValue(attribute.CurrentValue - magnitude, persistentId.ID);
+                        break;
+                    case ModifierOp.Multiply:
+                        attribute.SetCurrentValue(attribute.CurrentValue / magnitude, persistentId.ID);
+                        break;
+                    case ModifierOp.Override:
+                        attribute.SetCurrentValue(magnitude, persistentId.ID);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }

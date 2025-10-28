@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e8c2a3f007d4d79b849a16b9bdb428f, type: 3}
+  m_Name: GA_HealingPotion
+  m_EditorClassIdentifier: 
+  DisplayName: GA_HealingPotion
+  Description: 
+  Icon: {fileID: 0}
+  GrantedTags:
+    tags: []
+  ActivationRequiredTags:
+    tags: []
+  ActivationBlockedTags:
+    tags: []
+  CostEffect: {fileID: 0}
+  CooldownEffect: {fileID: 0}
+  EffectsToApply:
+  - {fileID: 11400000, guid: da886c5d4ace7ce488ac68a95ec0e83b, type: 2}
+  AbilityLevel: 1

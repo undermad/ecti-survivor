@@ -16,7 +16,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
         public bool Matches(GameplayTag other)
         {
             if (string.IsNullOrEmpty(other.Path) || string.IsNullOrEmpty(Path)) return false;
-// Parent/child matching by dot‑segments
+            // Parent/child matching by dot‑segments
             var mine = Path.Split('.');
             var theirs = other.Path.Split('.');
             if (theirs.Length > mine.Length) return false;

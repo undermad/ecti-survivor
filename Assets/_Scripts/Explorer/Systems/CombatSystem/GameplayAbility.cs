@@ -49,7 +49,10 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 
         public virtual void Activate(AbilitySystemComponent asc, GameObject target)
         {
-            if (!CanActivate(asc)) return;
+            if (!CanActivate(asc))
+            {
+                return;
+            }
             if (CostEffect)
                 asc.ApplyEffectSpec(asc.MakeSpec(CostEffect, AbilityLevel, asc.gameObject));
 

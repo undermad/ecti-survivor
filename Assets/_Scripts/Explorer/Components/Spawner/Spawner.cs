@@ -10,7 +10,7 @@ namespace Explorer._Project.Scripts.UniteAustin2017.Spawner
 
         public void Spawn()
         {
-            var spawnedObject = Instantiate(prefab, transform.position, transform.rotation);
+            Instantiate(prefab, transform.position, transform.rotation);
         }
     }
 }
