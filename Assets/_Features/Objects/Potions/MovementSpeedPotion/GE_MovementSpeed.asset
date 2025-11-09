@@ -15,7 +15,7 @@ MonoBehaviour:
   DisplayName: GE_MovementSpeed
   GrantedTags:
     tags:
-    - MovementSpeed
+    - {fileID: 11400000, guid: b520d0059bb367b4483e3a4eac424f73, type: 2}
   RequiredTargetTags:
     tags: []
   BlockedTargetTags:

@@ -10,21 +10,29 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
     [Serializable]
     public class GameplayTagContainer
     {
-        [SerializeField] private List<string> tags = new();
+        [SerializeField] private List<GameplayTag> tags = new();
 
         public IEnumerable<GameplayTag> Tags
         {
             get
             {
-                foreach (var t in tags) yield return new GameplayTag(t);
+                foreach (var gameplayTag in tags)
+                {
+                    yield return gameplayTag;
+                }
             }
         }
 
         public bool HasTag(GameplayTag tag)
         {
-            foreach (var t in Tags)
-                if (t.Matches(tag))
+            foreach (var gameplayTag in Tags)
+            {
+                if (gameplayTag.Matches(tag))
+                {
                     return true;
+                }
+            }
+
             return false;
         }
 
@@ -33,22 +41,27 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
             if (!HasExact(tag))
             {
                 EventBus<TagAddedEvent>.Publish(ownerId, new TagAddedEvent { Owner = ownerId, TagName = tag.Path });
-                tags.Add(tag.Path);
+                tags.Add(tag);
             }
         }
 
         public void RemoveTag(GameplayTag tag, Guid ownerId)
         {
-            Debug.unityLogger.Log($"Raising RemoveTag event, Tag: {tag.Path}");
-            EventBus<TagRemovedEvent>.Publish(ownerId, new TagRemovedEvent { Owner = ownerId, TagName = tag.Path });
-            tags.RemoveAll(t => string.Equals(t, tag.Path, StringComparison.OrdinalIgnoreCase));
+            if (tags.Remove(tag))
+            {
+                EventBus<TagRemovedEvent>.Publish(ownerId, new TagRemovedEvent { Owner = ownerId, TagName = tag.Path });
+            }
         }
 
         private bool HasExact(GameplayTag tag)
         {
-            foreach (var t in tags)
-                if (string.Equals(t, tag.Path, StringComparison.OrdinalIgnoreCase))
+            foreach (var gameplayTag in tags)
+            {
+                if (gameplayTag.Equals(tag))
+                {
                     return true;
+                }
+            }
             return false;
         }
     }

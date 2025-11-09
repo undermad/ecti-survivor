@@ -2,17 +2,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem
+namespace Explorer._Scripts.Explorer.Systems.Core.InputSystem
 {
     public abstract class GameInputAction : ScriptableObject
     {
         [NonSerialized] private InputAction _inputAction;
-        [NonSerialized] protected InputData InputData;
 
-        public void Initialize(InputAction inputAction, InputData inputData)
+        public void Initialize(InputAction inputAction)
         {
             _inputAction = inputAction;
-            InputData = inputData;
         }
 
         public void Enable()

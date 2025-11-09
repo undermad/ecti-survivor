@@ -1,8 +1,7 @@
 ﻿using KBCore.Refs;
-using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Explorer._Project.Scripts.UniteAustin2017.Spawner
+namespace Explorer._Scripts.Explorer.Components.Spawner
 {
     public class Spawner : ValidatedMonoBehaviour
     {

@@ -1,35 +1,38 @@
+using Explorer._Scripts.Explorer.Systems.Core.InputSystem;
 using KBCore.Refs;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
-namespace Explorer._Project.Scripts.Player.Hand
+namespace Explorer.ProjectOld.Old_1.Player.Hand
 {
     public class HandRotator : ValidatedMonoBehaviour
     {
         [SerializeField] public float radius = 1f;
         [SerializeField, Anywhere] private Transform attachedTo;
 
-        private Vector2 _mousePosition;
         private Vector2 _direction;
 
         void FixedUpdate()
         {
-            _mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            _direction = (_mousePosition - (Vector2)attachedTo.position).normalized;
-            transform.position = (Vector2)attachedTo.position + _direction * radius;
+            _direction = (InputData.PointerWorld - (Vector2)attachedTo.position).normalized;
+            var position = (Vector2)attachedTo.position + _direction * radius;
+            transform.position = position;
 
             float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            var quaternion = Quaternion.Euler(0f, 0f, angle - 90f);
+            transform.rotation = quaternion;
 
-            if (transform.parent.localScale.x > 0)
-            {
-                transform.localScale = _direction.x > 0 ? new Vector3(-1, 1, 1) : new Vector3(-1, -1, 1);
-            }
-            else
-            {
-                transform.localScale = _direction.x > 0 ? new Vector3(1, 1, 1) : new Vector3(1, -1, 1);
-            }
+            InputData.HandPosition = position;
+            InputData.HandRotation = quaternion;
+            
+
+            // if (transform.parent.localScale.x > 0)
+            // {
+            //     transform.localScale = _direction.x > 0 ? new Vector3(-1, 1, 1) : new Vector3(-1, -1, 1);
+            // }
+            // else
+            // {
+            //     transform.localScale = _direction.x > 0 ? new Vector3(1, 1, 1) : new Vector3(1, -1, 1);
+            // }
         }
     }
 }

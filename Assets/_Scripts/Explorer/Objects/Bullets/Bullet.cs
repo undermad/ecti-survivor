@@ -1,22 +1,21 @@
-﻿using System;
-using Explorer._Project.Scripts.UniteAustin2017.InputSystem;
+﻿using Explorer._Project.Scripts.UniteAustin2017.Bullets;
+using Explorer._Scripts.Explorer.Systems.Core.InputSystem;
 using Explorer._Scripts.Explorer.Systems.LifecycleManager;
 using KBCore.Refs;
 using UnityEngine;
 
-namespace Explorer._Project.Scripts.UniteAustin2017.Bullets
+namespace Explorer._Scripts.Explorer.Objects.Bullets
 {
     public class Bullet : ValidatedMonoBehaviour, IUpdateObserver
     {
         [SerializeField, Anywhere] private BulletData attributes;
-        [SerializeField, Anywhere] private InputData inputData;
         
         private Vector2 direction;
         
         private void Start()
         {
             var from = (Vector2) transform.position;
-            var to = inputData.PointerWorld;
+            var to = InputData.PointerWorld;
             direction = -(from - to).normalized;
         }
 

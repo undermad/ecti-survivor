@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Explorer._Scripts.Explorer.Objects.Potions
 {
+    [RequireComponent(typeof(Collider2D))]
     public class Potion : MonoBehaviour
     {
         [SerializeField, Anywhere] private GameplayAbility gameplayAbility;

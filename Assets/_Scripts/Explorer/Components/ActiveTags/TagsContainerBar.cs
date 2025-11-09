@@ -5,13 +5,14 @@ using Explorer._Scripts.Explorer.Objects;
 using Explorer._Scripts.Explorer.Systems.CombatSystem.Events;
 using KBCore.Refs;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Explorer._Scripts.Explorer.Components.ActiveTags
 {
     public class TagsContainerBar : ValidatedMonoBehaviour
     {
         [SerializeField, Parent] private PersistentId persistentId;
-        public TagsData tagsData;
+        [FormerlySerializedAs("tagsData")] public ActiveTagsData activeTagsData;
 
         private readonly List<ActiveTag> activeTags = new();
         private readonly Dictionary<ActiveTag, GameObject> spawnedObjects = new();
@@ -69,7 +70,7 @@ namespace Explorer._Scripts.Explorer.Components.ActiveTags
 
         private void HandleOnTagAdded(TagAddedEvent payload)
         {
-            var activeTag = tagsData.tags.Find(activeTag => activeTag.tagName.Equals(payload.TagName));
+            var activeTag = activeTagsData.tags.Find(activeTag => activeTag.gameplayTag.Path.Equals(payload.TagName));
             if (activeTag != null)
             {
                 activeTags.Add(activeTag);
@@ -79,7 +80,7 @@ namespace Explorer._Scripts.Explorer.Components.ActiveTags
 
         private void HandleOnTagRemoved(TagRemovedEvent payload)
         {
-            var activeTag = activeTags.Find(activeTag => activeTag.tagName.Equals(payload.TagName));
+            var activeTag = activeTags.Find(activeTag => activeTag.gameplayTag.Path.Equals(payload.TagName));
             if (activeTag != null)
             {
                 activeTags.Remove(activeTag);

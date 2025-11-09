@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 {
-    [CreateAssetMenu(menuName = "GAS/Ability", fileName = "Ability")]
+    [CreateAssetMenu(menuName = "GAS/Ability", fileName = "GA_")]
     public class GameplayAbility : ScriptableObject
     {
         public string DisplayName;
@@ -33,12 +33,12 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
                     }
                 }
             }
-
+            
             if (ActivationBlockedTags != null)
             {
                 foreach (var tag in ActivationBlockedTags.Tags)
                 {
-                    if (!abilitySystemComponent.Tags.HasTag(tag))
+                    if (abilitySystemComponent.Tags.HasTag(tag))
                     {
                         return false;
                     }
@@ -57,7 +57,9 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
                 asc.ApplyEffectSpec(asc.MakeSpec(CostEffect, AbilityLevel, asc.gameObject));
 
             if (CooldownEffect)
+            {
                 asc.ApplyEffectSpec(asc.MakeSpec(CooldownEffect, AbilityLevel, asc.gameObject));
+            }
 
             foreach (var eff in EffectsToApply)
                 asc.ApplyEffectSpec(asc.MakeSpec(eff, AbilityLevel, asc.gameObject), target);

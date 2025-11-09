@@ -15,7 +15,7 @@ MonoBehaviour:
   DisplayName: PoisonDot
   GrantedTags:
     tags:
-    - Poison
+    - {fileID: 11400000, guid: c2e418fc6d7c6cf4c83a39b3b9f885a4, type: 2}
   RequiredTargetTags:
     tags: []
   BlockedTargetTags:

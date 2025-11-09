@@ -3,16 +3,14 @@ using UnityEngine;
 
 namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 {
-    [Serializable]
-    public struct GameplayTag : IEquatable<GameplayTag>
+    [CreateAssetMenu(menuName = "GAS/GameplayTag", fileName = "GT_")]
+    public class GameplayTag : ScriptableObject, IEquatable<GameplayTag>
     {
-        [SerializeField] private string path; // e.g., "Status.Burning"
+        [SerializeField] private string path;
         public string Path => path ?? string.Empty;
-        public GameplayTag(string p) { path = p?.Trim() ?? string.Empty; }
-        public bool Equals(GameplayTag other) => string.Equals(Path, other.Path, StringComparison.OrdinalIgnoreCase);
-        public override bool Equals(object obj) => obj is GameplayTag gt && Equals(gt);
+        public bool Equals(GameplayTag other) => other != null && string.Equals(Path, other.Path, StringComparison.OrdinalIgnoreCase);
+        public override bool Equals(object obj) => obj is GameplayTag gameplayTag && Equals(gameplayTag);
         public override int GetHashCode() => StringComparer.OrdinalIgnoreCase.GetHashCode(Path);
-        public override string ToString() => Path;
         public bool Matches(GameplayTag other)
         {
             if (string.IsNullOrEmpty(other.Path) || string.IsNullOrEmpty(Path)) return false;

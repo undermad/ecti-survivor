@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using Explorer._Project.Scripts.UniteAustin2017.InputSystem;
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
-namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem
+namespace Explorer._Scripts.Explorer.Systems.Core.InputSystem
 {
     public class ActionsManager : ValidatedMonoBehaviour
     {
         [SerializeField, Anywhere] private InputActionAsset inputActionAsset;
-        [SerializeField, Anywhere] private InputData inputData;
         [SerializeField, Anywhere] private List<GameInputAction> actions = new();
 
         private readonly List<GameInputAction> runtimeActions = new();
@@ -27,7 +28,7 @@ namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem
                 var inputAction = inputActionAsset.FindAction(asset.name, throwIfNotFound: true);
                 var runtime = Instantiate(asset);
                 runtime.name = asset.name + " (Runtime)";
-                runtime.Initialize(inputAction, inputData);
+                runtime.Initialize(inputAction);
                 runtimeActions.Add(runtime);
             }
         }

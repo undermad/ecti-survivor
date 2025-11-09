@@ -17,6 +17,9 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
         // Runtime state
         private readonly Dictionary<string, Attribute> attributes = new(StringComparer.OrdinalIgnoreCase);
         private readonly List<ActiveEffect> activeEffects = new();
+        
+        public Guid GetOwnerId() => persistentId.ID;
+        public bool IsEqual(AbilitySystemComponent other) => other.GetOwnerId().Equals(GetOwnerId());
 
         private void Awake()
         {
@@ -66,7 +69,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
                 Level = level,
                 Instigator = instigator
             };
-            if (definition != null && definition.Modifiers != null)
+            if (definition && definition.Modifiers != null)
             {
                 foreach (var modifier in definition.Modifiers)
                 {
@@ -80,7 +83,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
         public bool ApplyEffectSpec(GameplayEffectSpec specification, GameObject targetObject = null)
         {
             var target = targetObject ? targetObject.GetComponent<AbilitySystemComponent>() : this;
-            if (target == null)
+            if (!target)
             {
                 target = this;
             }
@@ -140,9 +143,6 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
             foreach (var mod in spec.Def.Modifiers)
             {
                 var magnitude = spec.ResolvedMagnitudes[mod.AttributeName.Value];
-                
-                Debug.unityLogger.Log($"Magnitude: {magnitude}");
-                
                 var attribute = target.GetAttribute(mod.AttributeName.Value);
                 if (attribute == null) continue; // optional: create on the fly
 
@@ -226,7 +226,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem
 
         public bool TryActivateAbility(GameplayAbility ability, GameObject target = null)
         {
-            if (ability == null) return false;
+            if (!ability) return false;
             if (!GrantedAbilities.Contains(ability)) return false;
             if (!ability.CanActivate(this)) return false;
             ability.Activate(this, target);

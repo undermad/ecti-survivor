@@ -10,12 +10,7 @@ namespace Explorer._Scripts.Explorer.Systems.CombatSystem.Abilities
 
         public override bool CanActivate(AbilitySystemComponent abilitySystemComponent)
         {
-            if (abilitySystemComponent.Tags.HasTag(new GameplayTag("Cooldown.Fireball")))
-            {
-                return false;
-            }
-
-            return abilitySystemComponent.GetAttributeValue("Mana") >= 10f;
+            return false;
         }
 
         public override void Activate(AbilitySystemComponent abilitySystemComponent, GameObject target)

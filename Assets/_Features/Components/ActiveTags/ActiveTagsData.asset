@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: ActiveTagsData
   m_EditorClassIdentifier: 
   tags:
-  - tagName: MovementSpeed
-    icon: {fileID: 3513368255257788253, guid: fd210369fc4b4524fafc1aab66283462, type: 3}
-  - tagName: Poison
-    icon: {fileID: -6454228248407886337, guid: 537f33bbe156a85469eb6efdd1774ddc, type: 3}
+  - gameplayTag: {fileID: 11400000, guid: b520d0059bb367b4483e3a4eac424f73, type: 2}
+    icon: {fileID: -6007857137893288414, guid: 91f23d2d99520f7419c0bfe75f0312d7, type: 3}
+  - gameplayTag: {fileID: 11400000, guid: c2e418fc6d7c6cf4c83a39b3b9f885a4, type: 2}
+    icon: {fileID: -1382400894486524753, guid: 88cababaae5ba3b48b2b6cfb476968db, type: 3}
+  - gameplayTag: {fileID: 11400000, guid: 278788c4f7d8acc40b990bffd166ab81, type: 2}
+    icon: {fileID: 8347960185104365413, guid: f6b1621ce945c7c4c999bd21a2a58c3e, type: 3}

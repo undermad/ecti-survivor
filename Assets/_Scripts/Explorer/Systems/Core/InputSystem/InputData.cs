@@ -1,16 +1,17 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Explorer._Project.Scripts.UniteAustin2017.InputSystem
+namespace Explorer._Scripts.Explorer.Systems.Core.InputSystem
 {
-    [CreateAssetMenu(fileName = "InputData", menuName = "Input/InputData")]
-    public class InputData : ScriptableObject
+    public static class InputData
     {
-        [NonSerialized] public Vector2 Direction = Vector2.zero;
-        [NonSerialized] public bool IsFiring = false;
-        [NonSerialized] public Vector2 Look = Vector2.zero;
+        public static Vector2 Direction = Vector2.zero;
+        public static bool IsFiring = false;
+        public static Vector2 Look = Vector2.zero;
         
-        [NonSerialized] public Vector2 PointerScreen = Vector2.zero;
-        [NonSerialized] public Vector2 PointerWorld = Vector2.zero;
+        public static Vector2 PointerScreen = Vector2.zero;
+        public static Vector2 PointerWorld = Vector2.zero;
+        
+        public static Vector3 HandPosition = Vector3.zero;
+        public static Quaternion HandRotation = new Quaternion(0f, 0f, 0f, 0f);
     }
 }

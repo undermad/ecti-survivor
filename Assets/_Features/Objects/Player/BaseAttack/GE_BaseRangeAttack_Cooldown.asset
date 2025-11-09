@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff68f5d5a20748bd8dd91e9f992eb36f, type: 3}
+  m_Name: GE_BaseRangeAttack_Cooldown
+  m_EditorClassIdentifier: 
+  DisplayName: BaseRangeAttackCooldown
+  GrantedTags:
+    tags:
+    - {fileID: 11400000, guid: 5ba16db73dc2104409ec87ea83d8cf6a, type: 2}
+  RequiredTargetTags:
+    tags: []
+  BlockedTargetTags:
+    tags: []
+  Policy: 1
+  DurationSeconds:
+    Base: 0.001
+    PerLevel: 0
+  IsPeriodic: 0
+  Period:
+    Base: 1
+    PerLevel: 0
+  CanStack: 0
+  MaxStacks: 1
+  RefreshDurationOnStack: 1
+  Modifiers: []
